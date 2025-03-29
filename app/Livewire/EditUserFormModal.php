@@ -28,6 +28,7 @@ class EditUserFormModal extends Component
      * 
      * @var array $rules
      */
+
     protected $rules = [
         'user.is_admin' => 'nullable|boolean',
         'user.is_author' => 'nullable|boolean',
@@ -76,7 +77,7 @@ class EditUserFormModal extends Component
         $this->show = false;
 
         // Tell the event listener in the component that the modal was closed, so we can unlock the body.
-        $this->emit('modalClosed');
+        $this->dispatch('modalClosed');
     }
 
     /**

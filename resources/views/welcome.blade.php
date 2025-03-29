@@ -13,6 +13,7 @@
             </header>
 
             <livewire:latest-blog-posts />
+            
             @else
             <header class="text-center py-5 mt-5 mb-3">
                 <h2 class="text-2xl font-medium dark:text-white">There are no posts here!</h2>

@@ -19,9 +19,8 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(Post::class);
-
             $table->string('content', 1024);
-
+            $table->boolean('is_approved')->default(false);
             $table->timestamps();
         });
     }

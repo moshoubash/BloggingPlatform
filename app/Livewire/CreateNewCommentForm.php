@@ -27,7 +27,7 @@ class CreateNewCommentForm extends Component
     
     public function save()
     {
-        $this->authorize('create', App\Models\Comment::class);
+        $this->authorize('create', Comment::class);
 
         $this->validate();
  

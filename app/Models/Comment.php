@@ -8,24 +8,31 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Comment extends Model
 {
     use HasFactory;
-    
-    /**
-     * Get the user associated with the Comment
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
+
+    protected $fillable = ['content', 'is_approved'];
+
     public function user(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
-    /**
-     * Get the post associated with the Comment
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
     public function post(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(Post::class, 'id', 'post_id');
     }
+
+    // public function parent()
+    // {
+    //     return $this->belongsTo(Comment::class, 'parent_comment_id');
+    // }
+
+    // public function replies()
+    // {
+    //     return $this->hasMany(Comment::class, 'parent_comment_id');
+    // }
+
+    // public function likes()
+    // {
+    //     return $this->hasMany(Like::class, 'comment_id');
+    // }
 }

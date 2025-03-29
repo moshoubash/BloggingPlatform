@@ -57,7 +57,7 @@ class PostController extends Controller
      */
     public function create(Request $request)
     {
-        $this->authorize('create', App\Models\Post::class);
+        $this->authorize('create', Post::class);
 
         if (config('blog.easyMDE.enabled')) {
             if (!$request->has('draft_id')) {
