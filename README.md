@@ -4,15 +4,7 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-# Laravel Blog Starter Kit
-
-## Kickstart the development of your Laravel Blog with this Starter Kit built Laravel 11, TailwindCSS, AlpineJS, and Livewire!
-
-<img src="https://cdn.jsdelivr.net/gh/caendesilva/laravel-blogkit-static-demo@latest/storage/screenshots/devices/laptop_composite-min.png" />
-
-## Not actively maintained
-This project is currently not receiving new features as I am focusing on [HydePHP](https://github.com/hydephp/hyde), however,
-the project will continue to get security fixes as long as Laravel 11 is still supported. Open source contributions are welcome!
+# Blogging Platform
 
 ## Features
 * **Highly Customizable:** Turn features on and off in the config
@@ -25,12 +17,7 @@ the project will continue to get security fixes as long as Laravel 11 is still s
 ## Full Documentation
 Full documentation is available at https://docs.desilva.se/blogkit/. Generated using my free [Laradocgen](https://github.com/caendesilva/laradocgen) package!
 
-## Demos:
-Static demo of the default install: https://caendesilva.github.io/laravel-blogkit-static-demo/
-Live blog (my own (customized) blog built with this kit): https://blog.desilva.se/
-
 ## Get Started
-
 ### Quick Install
 
 ```bash
@@ -76,19 +63,6 @@ For best results, ensure that your cover images are 960 by 640 pixels as that is
 ## Contribute!
 PRs are very much welcome!
 
-Current todo list:
-- [ ] Unify session flashes
-- [ ] Add "load more" style pagination to comments
-- [x] Add this readme as a page on the demo site
-- [ ] Add Markdown caching (and clear post cache when updating post)
-- [x] Add Artisan command to generate posts from frontmatter Markdown
-- [ ] Add theme color option
-- [ ] Image uploads
-- [ ] Write more tests
-- [x] Add option to disable the "last updated" feature in the frontend
-- [ ] Add option to disable the CMS (if one just wants to use plain markdown files)
-- [ ] Add drafts manager for the drafts stored in the user's localstorage
-
 ## Open Source Attributions
 The Starter Kit is a modern [TALL stack](https://tallstack.dev/) application based on [Laravel Breeze](https://github.com/laravel/breeze) (MIT) using:
 - [TailwindCSS 3](https://tailwindcss.com/) (MIT)
@@ -98,19 +72,6 @@ The Starter Kit is a modern [TALL stack](https://tallstack.dev/) application bas
 
 Featured images on blog posts used by the seeder come from [Unsplash](https://unsplash.com/) via [picsum.photos](https://picsum.photos/) (Image License)[https://unsplash.com/license]
 Some of the frontend components are from [Flowbite](https://github.com/themesberg/flowbite) (MIT)
-
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com).
-
-If you discover a security vulnerability within this package, please send an e-mail to the creator, Caen De Silva, via [caen@desilva.se](mailto:caen@desilva.se).
-
-All security vulnerabilities will be promptly addressed.
 
 ## License
 
