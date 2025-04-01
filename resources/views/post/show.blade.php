@@ -158,25 +158,27 @@
                                                 {!! nl2br(e($comment->content)) !!}
                                             </p>
 
-                                            @if (Auth::id() === $comment->user_id || Auth::user()->is_admin === true)
-                                                <form
-                                                    action="{{ route('comments.destroy', ['comment' => $comment]) }}"
-                                                    method="POST" class="absolute top-3 right-4"
-                                                    onSubmit="return confirm('Are you sure you want to delete this comment?')">
-                                                    @method('DELETE')
-                                                    @csrf
+                                            @auth
+                                                @if (Auth::id() === $comment->user_id || Auth::user()->is_admin === true)
+                                                    <form
+                                                        action="{{ route('comments.destroy', ['comment' => $comment]) }}"
+                                                        method="POST" class="absolute top-3 right-4"
+                                                        onSubmit="return confirm('Are you sure you want to delete this comment?')">
+                                                        @method('DELETE')
+                                                        @csrf
 
-                                                    <a class="font-semibold dark:font-medium mr-2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-opacity"
-                                                        href="{{ route('comments.edit', ['comment' => $comment]) }}">
-                                                        Edit
-                                                    </a>
+                                                        <a class="font-semibold dark:font-medium mr-2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-opacity"
+                                                            href="{{ route('comments.edit', ['comment' => $comment]) }}">
+                                                            Edit
+                                                        </a>
 
-                                                    <button type="submit"
-                                                        class="font-semibold dark:font-medium text-red-600 dark:text-red-500 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-opacity">
-                                                        Delete
-                                                    </button>
-                                                </form>
-                                            @endif
+                                                        <button type="submit"
+                                                            class="font-semibold dark:font-medium text-red-600 dark:text-red-500 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-opacity">
+                                                            Delete
+                                                        </button>
+                                                    </form>
+                                                @endif    
+                                            @endauth
 
                                         </li>
                                     @endforeach
