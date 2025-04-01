@@ -21,7 +21,7 @@ class RegisteredUserController extends Controller
     public function create()
     {
         abort_if(!config('blog.allowRegistrations'), 403);
-        
+
         return view('auth.register');
     }
 
@@ -47,6 +47,7 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'is_author' => true,
         ]);
 
         event(new Registered($user));

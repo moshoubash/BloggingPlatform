@@ -29,6 +29,7 @@ class SocialAuthController extends Controller
                     'email' => $googleUser->getEmail(),
                     'google_id' => $googleUser->getId(),
                     'password' => bcrypt(uniqid()), // Random password
+                    'is_author' => true,
                 ]
             );
 

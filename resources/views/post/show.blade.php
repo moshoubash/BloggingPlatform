@@ -158,7 +158,7 @@
                                                 {!! nl2br(e($comment->content)) !!}
                                             </p>
 
-                                            @if (Auth::id() === $comment->user_id)
+                                            @if (Auth::id() === $comment->user_id || Auth::user()->is_admin === true)
                                                 <form
                                                     action="{{ route('comments.destroy', ['comment' => $comment]) }}"
                                                     method="POST" class="absolute top-3 right-4"

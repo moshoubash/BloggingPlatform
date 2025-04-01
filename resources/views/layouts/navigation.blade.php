@@ -20,11 +20,13 @@
                     Home
                 </x-nav-link>
 
-                @can('access-dashboards')
-                <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                    Dashboard
-                </x-nav-link>
-                @endcan
+                @auth
+                    @if (Auth::user()->is_admin === true)
+                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                            Dashboard
+                        </x-nav-link>
+                    @endif
+                @endauth
 
                 @guest
                 @if(Route::has('register'))
