@@ -6,42 +6,6 @@
             </a>
         </x-slot>
 
-        @if(config('blog.demoMode'))
-        <blockquote class="mb-5 border-l-2 pl-3">
-            <strong>
-                Demo Mode Active
-            </strong>    
-            <div>
-                You can log in using any of these pre-configured accounts.
-                @if(Route::has('register'))
-                Or <a href="{{ route('register') }}" class="text-indigo-500">register</a> for your own guest account.
-                @endif
-                <ul class="my-2">
-                    <li>
-                        <strong>Admin:</strong>
-                        admin@example.org
-                    </li>
-                    <li>
-                        <strong>Author:</strong>
-                        author@example.org
-                    </li>
-                    <li>
-                        <strong>Guest:</strong>
-                        guest@example.org
-                    </li>
-                    @if(config('blog.bans'))
-                    <li>
-                        <strong>Banned:</strong>
-                        banned@example.org
-                    </li>
-                    @endif
-                </ul>
-
-                All accounts have the password "password"
-            </div>
-        </blockquote>
-        @endif
-
         <!-- Session Status -->
         <x-auth-session-status class="mb-4" :status="session('status')" />
 
@@ -88,5 +52,10 @@
                 </x-button>
             </div>
         </form>
+
+        <div>Or</div>
+        <a href="{{ route('google.login') }}" class="px-4 py-2 bg-black-500 text-black rounded">
+            Login with Google
+        </a>
     </x-auth-card>
 </x-guest-layout>

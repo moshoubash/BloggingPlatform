@@ -40,7 +40,7 @@ class DemoSeeder extends Seeder
                 'is_author' => true,
             ]);
         }
-        
+
         if (!User::where('email', 'guest@example.org')->count()) {
             User::create([
                 'name' => 'Guest',
@@ -49,7 +49,7 @@ class DemoSeeder extends Seeder
                 'password' => Hash::make('password'),
             ]);
         }
-        
+
         if (config('blog.bans')) {
             if (!User::where('email', 'banned@example.org')->count()) {
                 User::create([

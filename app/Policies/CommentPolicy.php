@@ -23,11 +23,11 @@ class CommentPolicy
             return Response::deny('Commenting is not allowed.');
         }
 
-        if (config('blog.requireVerifiedEmailForComments') && !$user->hasVerifiedEmail()) {
-            return Response::deny('Your email must be verified to comment.');
-        }
+        // if (config('blog.requireVerifiedEmailForComments') && !$user->hasVerifiedEmail()) {
+        //     return Response::deny('Your email must be verified to comment.');
+        // }
 
-        if ($user->is_admin == true) {
+        if ($user->is_admin == true || $user->is_author == true) {
             return true;
         }
     }
@@ -49,7 +49,7 @@ class CommentPolicy
             return Response::deny('Your email must be verified to comment.');
         }
 
-        if ($user->is_admin == true) {
+        if ($user->is_admin == true || $user->is_author == true) {
             return true;
         }
 
@@ -67,10 +67,10 @@ class CommentPolicy
      */
     public function delete(User $user, Comment $comment)
     {
-        if ($user->is_admin == true) {
+        if ($user->is_admin == true || $user->is_author == true) {
             return true;
         }
-        
+
         return $user->id === $comment->user_id
             ? Response::allow()
             : Response::deny('You do not own this comment.');

@@ -55,5 +55,10 @@
                 </x-button>
             </div>
         </form>
+
+        <div>Or</div>
+        <a href="{{ route('google.login') }}" class="px-4 py-2 bg-black-500 text-black rounded">
+            Register with Google
+        </a>
     </x-auth-card>
 </x-guest-layout>
