@@ -45,7 +45,7 @@
                                 name="password_confirmation" required />
             </div>
 
-            <div class="flex items-center justify-end mt-4">
+            <div class="flex items-center justify-between mt-4">
                 <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
                     {{ __('Already registered?') }}
                 </a>
@@ -70,7 +70,7 @@
                 <path fill="#FBBC05" d="M10.4 28.4c-.8-2.4-1.3-5-.1-7.3l-7.6-5.9c-2.9 5.8-2.9 12.8 0 18.7l7.6-5.5z"/>
                 <path fill="#34A853" d="M24 48c6.5 0 11.8-2.2 15.8-5.9l-7.6-5.9c-2.2 1.5-5 2.4-8.2 2.4-5.5 0-10.3-3.4-12-8.4l-7.6 5.9c4 8 12 13.5 21.2 13.5z"/>
             </svg>
-            Register with Google
+            Continue with Google
         </a>
     </x-auth-card>
 </x-guest-layout>
