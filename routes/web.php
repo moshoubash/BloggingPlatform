@@ -47,6 +47,7 @@ Route::get('/dashboard', [DashboardController::class, 'show'])->middleware(['aut
 Route::get('/profile/{user}', [UserController::class, 'profile'])->name('profile');
 Route::post('/users/{user}/follow', [UserController::class, 'toggleFollow'])->middleware(['auth'])->name('users.follow');
 Route::get('/user/edit/{user}', [UserController::class, 'edit'])->middleware(['auth'])->name('user.edit');
+Route::put('/user/update/{user}', [UserController::class, 'update'])->middleware(['auth'])->name('user.update');
 
 if (config('blog.readme')) {
     Route::get('/readme', ReadmeController::class);

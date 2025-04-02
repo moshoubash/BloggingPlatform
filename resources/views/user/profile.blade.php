@@ -2,8 +2,8 @@
     <div class="relative" style="max-width: 1200px; margin: auto;">
         <!-- Cover Image Section -->
             <div class="bg-black flex items-center justify-center" style="height: 200px; border-radius: 0 0 20px 20px; overflow: hidden;">
-                @if ($profile_cover)
-                    <img src="{{ $profile_cover }}" alt="user cover image" class="w-full h-full object-cover">
+                @if ($cover_image)
+                    <img src="{{ asset('storage/'.$user->cover_image) }}" alt="user cover image" class="w-full h-full object-cover">
                 @else
                     <img src='https://t3.ftcdn.net/jpg/04/67/96/14/360_F_467961418_UnS1ZAwAqbvVVMKExxqUNi0MUFTEJI83.jpg' alt="user cover image" class="w-full h-full object-cover">
                 @endif
@@ -22,11 +22,11 @@
 
             <!-- Profile Picture and User Info Section -->
             <div class="flex flex-col items-center bg-gray-700 pb-6 px-4 text-center dark:text-white" style="transform: translateY(-35%);">
-                <div class="w-32 h-32 border-white flex items-center justify-center mb-4">
+                <div class="w-32 h-32 border-white flex items-center justify-center mb-4" style="width: 200px; height: 200px; border-radius: 50%; border: 4px solid white; overflow: hidden;">
                     @if($profile_image)
-                        <img src="{{ $profile_image }}" alt="user profile picture" width="200" height="200" style="border-radius:50%;">
+                        <img src="{{ asset('storage/'.$user->profile_image) }}" alt="user profile picture" style="width: 100%; height: 100%; object-fit: cover;">
                     @else
-                        <img src='https://i.ibb.co/sddfSJ9L/user.png' width="200" height="200" alt="user profile picture" style="border-radius:50%;">
+                        <img src='https://i.ibb.co/sddfSJ9L/user.png' alt="user profile picture" style="width: 100%; height: 100%; object-fit: cover;">
                     @endif
                 </div>
 
@@ -46,7 +46,7 @@
                     </button>
                 </form>
                 @else
-                    <div class="mt-1">
+                    <div class="mt-2">
                         <a href="{{ route('user.edit', ['user' => $user]) }}" class="px-3 py-1 rounded-full transition duration-300" style="background-color: #1DA1F2; color: white;">
                             Edit Profile
                         </a>
@@ -61,26 +61,26 @@
                 </div>
 
                 <!-- Followers Modal -->
-                <div id="followersModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+                <div id="followersModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden" style="opacity:0.97">
                     <div class="bg-white rounded-lg shadow-lg w-100 p-4" style="min-width: 600px;">
                         <h3 class="text-lg font-semibold mb-4 dark:text-black">Followers</h3>
                         <ul>
                             @foreach ($user->followers as $follower)
                                 <li class="flex justify-between items-center mb-2">
-                                    <div class="flex items-center ">
+                                    <div class="flex items-center space-x-2">
                                         <img src="
                                         @if ($follower->profile_image)
-                                            {{ $follower->profile_image }}
+                                            {{ asset('storage/'.$follower->profile_image) }}
                                         @else
                                             https://i.ibb.co/sddfSJ9L/user.png
                                         @endif
-                                        " alt="user profile picture" width="50" height="50" style="border-radius:50%;" class="mr-2">
+                                        " alt="user profile picture" style="width: 50px; height: 50px; object-fit: cover; border-radius:50%;">
                                         <span class="dark:text-black">{{ $follower->name }}</span>
                                     </div>
                                     <form action="{{ route('users.follow', $follower->id) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="text-sm px-2 py-1 rounded-full transition duration-300" style="background-color: {{ Auth::user()->isFollowing($follower) ? '#FF1919' : '#1DA1F2' }}; color: white;">
-                                            {{ Auth::user()->isFollowing($follower) ? 'Unfollow' : 'Follow' }}
+                                        <button type="submit" class="text-sm px-2 py-1 rounded-full transition duration-300" style="background-color: {{ Auth::check() && Auth::user()->isFollowing($follower) ? '#FF1919' : '#1DA1F2' }}; color: white;">
+                                            {{ Auth::check() && Auth::user()->isFollowing($follower) ? 'Unfollow' : 'Follow' }}
                                         </button>
                                     </form>
                                 </li>
@@ -91,8 +91,8 @@
                 </div>
 
                 <!-- Following Modal -->
-                <div id="followingModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-                    <div class="bg-white rounded-lg shadow-lg w-100 p-4" style="min-width: 600px;">
+                <div id="followingModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden" style="opacity:0.97;">
+                    <div class="bg-white rounded-lg shadow-lg w-100 p-5" style="min-width: 600px;">
                         <h3 class="text-lg font-semibold mb-4 dark:text-black">Following</h3>
                         <ul>
                             @foreach ($user->following as $following)
@@ -100,11 +100,11 @@
                                     <div class="flex items-center ">
                                         <img src="
                                         @if ($following->profile_image)
-                                            {{ $following->profile_image }}
+                                            {{ asset('storage/'.$following->profile_image) }}
                                         @else
                                             https://i.ibb.co/sddfSJ9L/user.png
                                         @endif
-                                        " alt="user profile picture" width="50" height="50" style="border-radius:50%;" class="mr-2">
+                                        " alt="user profile picture" style="width: 50px; height: 50px; object-fit: cover; border-radius:50%;" class="mr-2">
                                         <span class="dark:text-black">{{ $following->name }}</span>
                                     </div>
                                     <form action="{{ route('users.follow', $following->id) }}" method="POST">

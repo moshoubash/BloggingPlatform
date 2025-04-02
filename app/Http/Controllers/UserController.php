@@ -57,7 +57,29 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'bio' => 'nullable|string|max:500',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($request->hasFile('profile_image')) {
+            $profileImagePath = $request->file('profile_image')->store('profile_images', 'public');
+            $user->profile_image = $profileImagePath;
+        }
+
+        if ($request->hasFile('cover_image')) {
+            $profileCoverPath = $request->file('cover_image')->store('cover_images', 'public');
+            $user->cover_image = $profileCoverPath;
+        }
+
+        $user->update($request->except(['profile_image', 'cover_image']));
+
+        return redirect()->route('profile', ['user' => $user])->with('success', 'Profile updated successfully.');
     }
 
     /**
@@ -78,7 +100,7 @@ class UserController extends Controller
             'bio' => $user->bio,
             'user_id' => $user->id,
             'profile_image' => $user->profile_image,
-            'profile_cover' => $user->profile_cover,
+            'cover_image' => $user->cover_image,
             'posts' => $user->posts,
             'userLikes' => $user->likes,
             'userFollowers' => $user->followers,
