@@ -120,7 +120,7 @@ class PostController extends Controller
             'post' => $post,
             'markdown' => $markdown,
             'like_count' => $post->likes()->count(),
-            'user_has_liked' => $post->likes()->where('likes.user_id', Auth::user()->id)->exists(),
+            'user_has_liked' => Auth::check() ? $post->likes()->where('likes.user_id', Auth::id())->exists() : false,
         ]);
     }
 
