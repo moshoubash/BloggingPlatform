@@ -60,6 +60,9 @@
                             <!-- Authentication -->
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
+                                <x-dropdown-link :href="route('profile', ['user' => Auth::user()])">
+                                    {{ __('Profile') }}
+                                </x-dropdown-link>
 
                                 <x-dropdown-link :href="route('logout')"
                                         onclick="event.preventDefault();

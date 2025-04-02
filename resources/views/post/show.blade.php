@@ -65,7 +65,7 @@
                                 <span class="opacity-75">
                                     Posted by
                                 </span>
-                                <x-link :href="route('posts.index', ['author' => $post->author])" rel="author" itemprop="url">
+                                <x-link :href="route('profile', ['user' => $post->author])" rel="author" itemprop="url">
                                     <span itemprop="name">
                                         {{ $post->author->name }}
                                     </span>
@@ -177,7 +177,7 @@
                                                             Delete
                                                         </button>
                                                     </form>
-                                                @endif    
+                                                @endif
                                             @endauth
 
                                         </li>

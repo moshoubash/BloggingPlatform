@@ -5,6 +5,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ReadmeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SocialAuthController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Post;
 use Laravel\Socialite\Facades\Socialite;
@@ -42,6 +43,10 @@ Route::resource('comments', CommentController::class)->only([
 ]);
 
 Route::get('/dashboard', [DashboardController::class, 'show'])->middleware(['auth', 'can:access-dashboards'])->name('dashboard');
+
+Route::get('/profile/{user}', [UserController::class, 'profile'])->name('profile');
+Route::post('/users/{user}/follow', [UserController::class, 'toggleFollow'])->middleware(['auth'])->name('users.follow');
+Route::get('/user/edit/{user}', [UserController::class, 'edit'])->middleware(['auth'])->name('user.edit');
 
 if (config('blog.readme')) {
     Route::get('/readme', ReadmeController::class);

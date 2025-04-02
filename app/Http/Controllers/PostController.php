@@ -90,6 +90,11 @@ class PostController extends Controller
             $validated['tags'] = json_decode($validated['tags'], true);
         }
 
+        // Set default featured image if none is provided
+        if (empty($validated['featured_image'])) {
+            $validated['featured_image'] = 'https://placehold.co/960x640';
+        }
+
         // Create the post
         return (new CreatesNewPost)->store($request->user(), $validated);
     }

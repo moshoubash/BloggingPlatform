@@ -19,7 +19,7 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $fillable = ['username', 'email', 'password', 'name', 'bio', 'role_id', 'google_id', 'is_author'];
+    protected $fillable = ['username', 'email', 'password', 'name', 'bio', 'role_id', 'google_id', 'is_author', 'profile_image', 'cover_image'];
 
     protected $hidden = [
         'password',
@@ -38,38 +38,43 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Post::class, 'user_id', 'id');
     }
 
-    public function role()
+    public function role() : \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Role::class, 'role_id');
     }
 
-    public function comments()
+    public function comments() : \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Comment::class, 'user_id');
     }
 
-    public function likes()
+    public function likes() : \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Like::class, 'user_id');
     }
 
-    public function postViews()
+    public function postViews() : \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(PostView::class, 'user_id');
+        return $this->hasMany(PageView::class, 'user_id');
     }
 
-    public function notifications()
+    public function notifications() : \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Notification::class, 'user_id');
     }
 
-    public function followers()
+    public function followers() : \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(User::class, 'followers', 'followed_id', 'follower_id');
     }
 
-    public function following()
+    public function following() : \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(User::class, 'followers', 'follower_id', 'followed_id');
+    }
+
+    public function isFollowing($user)
+    {
+        return $this->following->contains($user);
     }
 }

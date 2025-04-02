@@ -9,22 +9,22 @@
         @if(config('blog.withTags') && config('blog.showTagsOnPostCard') && $post->tags)
             <x-post-tags :tags="$post->tags" class="text-xs" />
         @endif
-                
+
         <a href="{{ route('posts.show', $post) }}">
             <h3 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white break-words">
                 @if($post->isPublished())
                 {{ $post->title }}
                 @else
                 <span class="opacity-75" title="This post has not yet been published">
-                    Draft: 
+                    Draft:
                 </span>
                 <i>{{ $post->title }}</i>
                 @endif
             </h3>
         </a>
-        
+
         <p class="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400 overflow-hidden text-ellipsis">
-            By <x-link :href="route('posts.index', ['author' => $post->author])" rel="author">{{ $post->author->name }}</x-link>
+            By <x-link :href="route('profile', ['user' => $post->author])" rel="author">{{ $post->author->name }}</x-link>
             @if($post->isPublished())
             <span class="opacity-75" role="none">&bullet;</span>
             <time datetime="{{ $post->published_at }}" title="Published {{ $post->published_at }}">{{ $post->published_at->format('Y-m-d') }}</time>.
@@ -43,7 +43,7 @@
                         The post has {{ $post->comments->count() }} comments.
                             <a href="{{ route('posts.show', $post) }}#comments">Go to post comment section</a>
                         </span>
-                        
+
                         <a href="{{ route('posts.show', $post) }}#comments" role="none" aria-hidden="true" title="{{ $post->comments->count() }} comments">
                             <svg class="inline fill-gray-500 dark:text-gray-300" role="presentation" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18zM18 14H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
                             {{ $post->comments->count() }}
