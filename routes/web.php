@@ -49,6 +49,8 @@ Route::post('/users/{user}/follow', [UserController::class, 'toggleFollow'])->mi
 Route::get('/user/edit/{user}', [UserController::class, 'edit'])->middleware(['auth'])->name('user.edit');
 Route::put('/user/update/{user}', [UserController::class, 'update'])->middleware(['auth'])->name('user.update');
 
+Route::post('/posts/{post}/like', [PostController::class, 'like'])->middleware(['auth'])->name('posts.like');
+
 if (config('blog.readme')) {
     Route::get('/readme', ReadmeController::class);
 }

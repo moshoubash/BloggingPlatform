@@ -120,6 +120,23 @@
                     {!! $markdown !!}
                 </section>
 
+                <section id="likes" class="border-t-2 dark:border-gray-600 mt-5 pt-5 pb-2">
+                    <h2 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Likes</h2>
+                    <div class="flex items-center">
+                        <form action="{{ route('posts.like', ['post' => $post]) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="flex items-center space-x-2">
+                                @if ($user_has_liked)
+                                    <i class="fa-solid fa-thumbs-up"></i>
+                                @else
+                                    <i class="fa-regular fa-thumbs-up"></i>
+                                @endif
+                                <h1>{{ $like_count }}</h1>
+                            </button>
+                        </form>
+                    </div>
+                </section>
+
                 <footer>
                     @if (config('blog.allowComments'))
                         @if (config('blog.contentLicense.enabled'))

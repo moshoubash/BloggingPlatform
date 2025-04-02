@@ -18,6 +18,8 @@
         <!-- Styles -->
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
         
+        <script src="https://kit.fontawesome.com/d890c03bb3.js" crossorigin="anonymous"></script>
+        
         <livewire:styles />
 
         <!-- Scripts -->

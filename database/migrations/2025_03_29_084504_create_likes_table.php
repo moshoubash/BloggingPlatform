@@ -16,11 +16,8 @@ return new class extends Migration
     {
         Schema::create('likes', function (Blueprint $table) {
             $table->id();
-
             $table->foreignIdFor(User::class, 'user_id');
-            $table->foreignIdFor(Comment::class, 'comment_id')->nullable();
             $table->foreignIdFor(Post::class, 'post_id')->nullable();
-
             $table->timestamp('created_at')->useCurrent();
         });
     }

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Http\Controllers\MarkdownConverter;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -115,6 +116,8 @@ class PostController extends Controller
         return view('post.show', [
             'post' => $post,
             'markdown' => $markdown,
+            'like_count' => $post->likes()->count(),
+            'user_has_liked' => $post->likes()->where('user_id', Auth::user()->id)->exists()
         ]);
     }
 
@@ -214,5 +217,31 @@ class PostController extends Controller
         $post->delete();
 
         return back()->with('success', 'Successfully Deleted Post!');
+    }
+
+    /**
+     * Toggle like for the specified post.
+     *
+     * @param  \App\Models\Post  $post
+     * @return \Illuminate\Http\Response
+     */
+    public function like(Post $post)
+    {
+        $like = $post->likes()->where('user_id', Auth::user()->id);
+
+        // If the user has already liked the post, remove the like
+        if ($like->exists()) {
+            $like->delete();
+            return back();
+        }
+
+        // Otherwise, create a new like for the post
+        $like = $post->likes()->make([
+            'user_id' => Auth::user()->id,
+        ]);
+        $like->timestamps = false;
+        $like->save();
+
+        return back();
     }
 }
