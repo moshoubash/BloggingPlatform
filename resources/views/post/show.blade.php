@@ -137,6 +137,22 @@
                     </div>
                 </section>
 
+                <section id="bookmark" class="border-t-2 dark:border-gray-600 mt-5 pt-5 pb-2">
+                    <h2 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Bookmark</h2>
+                    <div class="flex items-center">
+                        <form action="{{ route('posts.bookmark', ['post' => $post]) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="flex items-center space-x-2">
+                                @if (App\Models\Bookmark::where('user_id', Auth::id())->where('post_id', $post->id)->exists())
+                                    <i class="fa-solid fa-bookmark"></i>
+                                @else
+                                    <i class="fa-regular fa-bookmark"></i>
+                                @endif
+                            </button>
+                        </form>
+                    </div>
+                </section>
+
                 <footer>
                     @if (config('blog.allowComments'))
                         @if (config('blog.contentLicense.enabled'))

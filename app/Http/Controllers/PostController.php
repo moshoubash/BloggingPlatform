@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Bookmark;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Http\Controllers\MarkdownConverter;
+use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
@@ -108,6 +110,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        $currentUser = Auth::user();
         $this->authorize('view', $post);
 
         // Generate formatted HTML from markdown
@@ -117,7 +120,7 @@ class PostController extends Controller
             'post' => $post,
             'markdown' => $markdown,
             'like_count' => $post->likes()->count(),
-            'user_has_liked' => $post->likes()->where('user_id', Auth::user()->id)->exists()
+            'user_has_liked' => $post->likes()->where('likes.user_id', Auth::user()->id)->exists(),
         ]);
     }
 
@@ -227,7 +230,7 @@ class PostController extends Controller
      */
     public function like(Post $post)
     {
-        $like = $post->likes()->where('user_id', Auth::user()->id);
+        $like = $post->likes()->where('likes.user_id', Auth::user()->id);
 
         // If the user has already liked the post, remove the like
         if ($like->exists()) {
@@ -241,6 +244,33 @@ class PostController extends Controller
         ]);
         $like->timestamps = false;
         $like->save();
+
+        return back();
+    }
+
+    /**
+     * Toggle bookmark for the specified post.
+     *
+     * @param  \App\Models\Post  $post
+     * @return \Illuminate\Http\Response
+     */
+    public function bookmark(Post $post)
+    {
+        $bookmark = Bookmark::where('user_id', Auth::id())->where('post_id', $post->id)->first();
+
+        // If the user has already bookmarked the post, remove the bookmark
+        if ($bookmark) {
+            $bookmark->delete();
+            return back();
+        }
+
+        // Otherwise, create a new bookmark for the post
+        $bookmark = new Bookmark([
+            'user_id' => Auth::id(),
+            'post_id' => $post->id,
+        ]);
+        $bookmark->timestamps = false;
+        $bookmark->save();
 
         return back();
     }

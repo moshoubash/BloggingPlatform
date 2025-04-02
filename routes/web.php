@@ -51,6 +51,9 @@ Route::put('/user/update/{user}', [UserController::class, 'update'])->middleware
 
 Route::post('/posts/{post}/like', [PostController::class, 'like'])->middleware(['auth'])->name('posts.like');
 
+Route::post('/posts/{post}/bookmark', [PostController::class, 'bookmark'])->middleware(['auth'])->name('posts.bookmark');
+Route::get('/user/{user}/bookmarks', [UserController::class, 'bookmarks'])->middleware(['auth'])->name('bookmarks.index');
+
 if (config('blog.readme')) {
     Route::get('/readme', ReadmeController::class);
 }

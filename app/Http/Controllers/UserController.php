@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Post;
 use App\Models\Follower;
+use App\Models\Bookmark;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -140,5 +141,21 @@ class UserController extends Controller
         }
 
         return back();
+    }
+
+    /**
+     * Show the bookmarks of the user.
+     */
+    public function bookmarks(User $user)
+    {
+        $userBookmarks = Bookmark::where('user_id', $user->id)
+            ->with('post')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+        
+        return view('user.bookmarks', [
+            'bookmarkedPosts' => $userBookmarks,
+            'user' => $user,
+        ]);
     }
 }

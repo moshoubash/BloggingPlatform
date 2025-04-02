@@ -37,7 +37,7 @@
                 @if (Auth::check() && Auth::user()->id != $user_id)
                 <form action="{{ route('users.follow', $user->id) }}" method="POST" class="mt-1">
                     @csrf
-                    <button type="submit" class="px-3 py-1 rounded-full transition duration-300" style="background-color: {{ $isFollowing ? '#FF1919' : '#1DA1F2' }}; color: white;">
+                    <button type="submit" class="px-3 py-1 rounded-full transition duration-300" style="background-color: {{ $isFollowing ? '#FF1919' : '#1DA1F2' }}; color: white; border-radius: 5px;">
                         @if ($isFollowing)
                             Unfollow
                         @else
@@ -47,7 +47,7 @@
                 </form>
                 @else
                     <div class="mt-2">
-                        <a href="{{ route('user.edit', ['user' => $user]) }}" class="px-3 py-1 rounded-full transition duration-300" style="background-color: #1DA1F2; color: white;">
+                        <a href="{{ route('user.edit', ['user' => $user]) }}" class="px-3 py-1 rounded-full transition duration-300" style="background-color: #1DA1F2; color: white; border-radius: 5px;">
                             Edit Profile
                         </a>
                     </div>
@@ -79,7 +79,7 @@
                                     </div>
                                     <form action="{{ route('users.follow', $follower->id) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="text-sm px-2 py-1 rounded-full transition duration-300" style="background-color: {{ Auth::check() && Auth::user()->isFollowing($follower) ? '#FF1919' : '#1DA1F2' }}; color: white;">
+                                        <button type="submit" class="text-sm px-2 py-1 rounded-full transition duration-300" style="background-color: {{ Auth::check() && Auth::user()->isFollowing($follower) ? '#FF1919' : '#1DA1F2' }}; color: white; border-radius: 5px;">
                                             {{ Auth::check() && Auth::user()->isFollowing($follower) ? 'Unfollow' : 'Follow' }}
                                         </button>
                                     </form>
@@ -109,7 +109,7 @@
                                     </div>
                                     <form action="{{ route('users.follow', $following->id) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="text-sm px-2 py-1 rounded-full transition duration-300" style="background-color: {{Auth::check() && Auth::user()->isFollowing($following) ? '#FF1919' : '#1DA1F2' }}; color: white;">
+                                        <button type="submit" class="text-sm px-2 py-1 rounded-full transition duration-300" style="background-color: {{Auth::check() && Auth::user()->isFollowing($following) ? '#FF1919' : '#1DA1F2' }}; color: white; border-radius: 5px;">
                                             {{ Auth::check() && Auth::user()->isFollowing($following) ? 'Unfollow' : 'Follow' }}
                                         </button>
                                     </form>

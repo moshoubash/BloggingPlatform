@@ -64,6 +64,10 @@
                                     {{ __('Profile') }}
                                 </x-dropdown-link>
 
+                                <x-dropdown-link :href="route('bookmarks.index', ['user' => Auth::user()])">
+                                    {{ __('Bookmarks') }}
+                                </x-dropdown-link>
+
                                 <x-dropdown-link :href="route('logout')"
                                         onclick="event.preventDefault();
                                                     this.closest('form').submit();">
