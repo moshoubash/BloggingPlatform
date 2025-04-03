@@ -15,6 +15,7 @@
         "livewire/livewire": "^3.5",
         "rubix/ml": "^2.5",
         "spatie/yaml-front-matter": "^2.0",
+        "stripe/stripe-php": "^17.1",
         "torchlight/torchlight-commonmark": "dev-main",
         "torchlight/torchlight-laravel": "^0.6.0"
     },
