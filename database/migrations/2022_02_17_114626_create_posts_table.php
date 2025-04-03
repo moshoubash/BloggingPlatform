@@ -27,6 +27,9 @@ return new class extends Migration
             $table->longText('body'); // The Post Body
             $table->integer('view_count')->default(0);
             $table->timestamps();
+            
+            // Add is_premium column to indicate whether the post is premium or not
+            $table->boolean('is_premium')->default(false); // Default to false (free posts)
         });
     }
 
