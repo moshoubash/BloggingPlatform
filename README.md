@@ -21,12 +21,13 @@ Full documentation is available at https://docs.desilva.se/blogkit/. Generated u
 ### Quick Install
 
 ```bash
-git clone https://github.com/caendesilva/laravel-blogkit.git
+git clone https://github.com/moshoubash/BloggingPlatform.git
 cd laravel-blogkit
 composer install
 npm install && npm run prod
 cp .env.example .env
 php artisan migrate
+php artisan db:seed --class=DemoSeeder
 php artisan key:generate
 php artisan storage:link
 php artisan admin:create

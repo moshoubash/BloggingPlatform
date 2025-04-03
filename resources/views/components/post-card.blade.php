@@ -1,3 +1,9 @@
+@php
+    $views = App\Models\PageView::all();
+    $post_url = '/' . 'posts/' . $post->slug;
+    $views = $views->where('page', $post_url)->count();   
+@endphp
+
 <article class="w-full sm:w-80 bg-white rounded-lg shadow-md dark:bg-gray-800 m-4 my-5 flex flex-col flex-grow">
     <header>
         <a href="{{ route('posts.show', $post) }}">
@@ -9,22 +15,22 @@
         @if(config('blog.withTags') && config('blog.showTagsOnPostCard') && $post->tags)
             <x-post-tags :tags="$post->tags" class="text-xs" />
         @endif
-                
+
         <a href="{{ route('posts.show', $post) }}">
             <h3 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white break-words">
                 @if($post->isPublished())
                 {{ $post->title }}
                 @else
                 <span class="opacity-75" title="This post has not yet been published">
-                    Draft: 
+                    Draft:
                 </span>
                 <i>{{ $post->title }}</i>
                 @endif
             </h3>
         </a>
-        
+
         <p class="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400 overflow-hidden text-ellipsis">
-            By <x-link :href="route('posts.index', ['author' => $post->author])" rel="author">{{ $post->author->name }}</x-link>
+            By <x-link :href="route('profile', ['user' => $post->author])" rel="author">{{ $post->author->name }}</x-link>
             @if($post->isPublished())
             <span class="opacity-75" role="none">&bullet;</span>
             <time datetime="{{ $post->published_at }}" title="Published {{ $post->published_at }}">{{ $post->published_at->format('Y-m-d') }}</time>.
@@ -34,7 +40,7 @@
                     @if(config('analytics.enabled'))
                         <span class="{{ config('blog.allowComments') ? 'mr-2' : '' }}" role="none" aria-hidden="true" title="{{ number_format($post->getViewCount()) }} views">
                             <svg class="inline fill-gray-500 dark:text-gray-300" role="presentation" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-                            {{ number_format($post->getViewCount()) }}
+                            {{ $views }}
                         </span>
                     @endif
 
@@ -43,7 +49,7 @@
                         The post has {{ $post->comments->count() }} comments.
                             <a href="{{ route('posts.show', $post) }}#comments">Go to post comment section</a>
                         </span>
-                        
+
                         <a href="{{ route('posts.show', $post) }}#comments" role="none" aria-hidden="true" title="{{ $post->comments->count() }} comments">
                             <svg class="inline fill-gray-500 dark:text-gray-300" role="presentation" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18zM18 14H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
                             {{ $post->comments->count() }}

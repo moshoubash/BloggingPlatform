@@ -19,6 +19,7 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;  // Removed Billable trait
 
+
     protected $fillable = [
         'username', 
         'email', 
@@ -28,6 +29,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'role_id', 
         'google_id', 
         'is_author', 
+        'profile_image', 
+        'cover_image',
         'stripe_customer_id',  // Stripe customer ID
         'stripe_subscription_id', // Stripe subscription ID
         'stripe_plan_id',          // Stripe plan ID
@@ -50,37 +53,37 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Post::class, 'user_id', 'id');
     }
 
-    public function role()
+    public function role() : \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Role::class, 'role_id');
     }
 
-    public function comments()
+    public function comments() : \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Comment::class, 'user_id');
     }
 
-    public function likes()
+    public function likes() : \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Like::class, 'user_id');
     }
 
-    public function postViews()
+    public function postViews() : \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(PostView::class, 'user_id');
+        return $this->hasMany(PageView::class, 'user_id');
     }
 
-    public function notifications()
+    public function notifications() : \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Notification::class, 'user_id');
     }
 
-    public function followers()
+    public function followers() : \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(User::class, 'followers', 'followed_id', 'follower_id');
     }
 
-    public function following()
+    public function following() : \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(User::class, 'followers', 'follower_id', 'followed_id');
     }
@@ -106,5 +109,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function hasPremiumPlan()
     {
         return $this->stripe_plan_id === 'price_1R9mLtPrNcimFvkcWtBo6iLF'; // Use the actual Stripe premium plan Price ID
+    }
+    public function isFollowing($user)
+    {
+        return $this->following->contains($user);
+    }
+
+    public function bookmarks() : \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Post::class, 'bookmarks', 'user_id', 'post_id');
     }
 }

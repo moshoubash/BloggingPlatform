@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Post;
 use App\Models\Comment;
+use App\Models\Notification;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -39,6 +40,13 @@ class CreateNewCommentForm extends Component
         $comment->content = $this->content;
 
         $comment->save();
+
+        // Create a notification for the post author
+        $notification = new Notification;
+        $notification->user_id = $this->post->user_id; // The author of the post
+        $notification->type = 'Comment';
+        $notification->content = Auth::user()->name . ' has commented: ' . $this->content . ' on your post: ' . $this->post->title;
+        $notification->save();
 
         return redirect()->route('posts.show', ['post' => $this->post]);
     }

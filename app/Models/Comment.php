@@ -20,19 +20,4 @@ class Comment extends Model
     {
         return $this->hasOne(Post::class, 'id', 'post_id');
     }
-
-    // public function parent()
-    // {
-    //     return $this->belongsTo(Comment::class, 'parent_comment_id');
-    // }
-
-    // public function replies()
-    // {
-    //     return $this->hasMany(Comment::class, 'parent_comment_id');
-    // }
-
-    // public function likes()
-    // {
-    //     return $this->hasMany(Like::class, 'comment_id');
-    // }
 }

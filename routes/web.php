@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ReadmeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
@@ -43,7 +45,18 @@ Route::get('/dashboard', [DashboardController::class, 'show'])
     ->middleware(['auth', 'can:access-dashboards'])
     ->name('dashboard');
 
-// Readme Route (Conditionally Loaded)
+Route::get('/profile/{user}', [UserController::class, 'profile'])->name('profile');
+Route::post('/users/{user}/follow', [UserController::class, 'toggleFollow'])->middleware(['auth'])->name('users.follow');
+Route::get('/user/edit/{user}', [UserController::class, 'edit'])->middleware(['auth'])->name('user.edit');
+Route::put('/user/update/{user}', [UserController::class, 'update'])->middleware(['auth'])->name('user.update');
+
+Route::post('/posts/{post}/like', [PostController::class, 'like'])->middleware(['auth'])->name('posts.like');
+
+Route::post('/posts/{post}/bookmark', [PostController::class, 'bookmark'])->middleware(['auth'])->name('posts.bookmark');
+Route::get('/user/{user}/bookmarks', [UserController::class, 'bookmarks'])->middleware(['auth'])->name('bookmarks.index');
+
+Route::patch('/notifications/{notification}/mark-as-read', [NotificationController::class, 'markAsRead'])->middleware(['auth'])->name('notifications.markAsRead');
+Route::get('/user/stats', [UserController::class, 'stats'])->middleware(['auth'])->name('user.stats');
 if (config('blog.readme')) {
     Route::get('/readme', [ReadmeController::class, '__invoke'])->name('readme');
 }
