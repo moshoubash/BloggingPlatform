@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Http\Controllers\MarkdownConverter;
+use App\Models\PageView;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Support\Facades\Auth;
 
@@ -110,8 +111,12 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        $currentUser = Auth::user();
         $this->authorize('view', $post);
+
+        // Get post views
+        $views = PageView::all();
+        $post_url = '/' . 'posts/' . $post->slug;
+        $views = $views->where('page', $post_url)->count();
 
         // Generate formatted HTML from markdown
         $markdown = (new MarkdownConverter($post->body))->toHtml();
@@ -122,12 +127,14 @@ class PostController extends Controller
                 }
             })
             ->get();
-        return view('post.show', [
+        
+            return view('post.show', [
             'post' => $post,
             'markdown' => $markdown,
             'like_count' => $post->likes()->count(),
             'user_has_liked' => Auth::check() ? $post->likes()->where('likes.user_id', Auth::id())->exists() : false,
             'relatedPosts' => $relatedPosts,
+            'postViews' => $views,
         ]);
     }
 
