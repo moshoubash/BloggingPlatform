@@ -33,9 +33,9 @@
             <p class="text-lg text-gray-600 dark:text-gray-300 mb-6">
                 Subscribe now to unlock full access to this post.
             </p>
-            <x-button class="px-6 py-3 bg-gradient-to-r from-indigo-700 to-purple-700 text-white rounded-lg hover:bg-purple-800">
-                Subscribe Now
-            </x-button>
+            <form action="{{ route('checkout.process') }}" method="POST" class="mt-8"> @csrf <button
+                class="px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-indigo-700 to-purple-700 rounded-lg hover:bg-purple-800 transition">
+                Subscribe Now </button> </form>
 
             <!-- Blurred Content Preview -->
             <div class="relative mt-8 p-8 bg-white dark:bg-gray-800 rounded-lg shadow-md blur-md">
