@@ -56,7 +56,7 @@ Route::post('/posts/{post}/bookmark', [PostController::class, 'bookmark'])->midd
 Route::get('/user/{user}/bookmarks', [UserController::class, 'bookmarks'])->middleware(['auth'])->name('bookmarks.index');
 
 Route::patch('/notifications/{notification}/mark-as-read', [NotificationController::class, 'markAsRead'])->middleware(['auth'])->name('notifications.markAsRead');
-
+Route::get('/user/stats', [UserController::class, 'stats'])->middleware(['auth'])->name('user.stats');
 if (config('blog.readme')) {
     Route::get('/readme', ReadmeController::class);
 }

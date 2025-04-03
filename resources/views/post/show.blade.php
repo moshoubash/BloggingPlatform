@@ -33,7 +33,7 @@
                 class="bg-white rounded-lg shadow-md dark:bg-gray-800 py-4 px-6 dark:text-white">
                 <meta itemprop="identifier" content="{{ $post->slug }}">
                 <meta itemprop="url" content="{{ route('posts.show', $post) }}">
-                <header role="doc-pageheader" class="mb-5">
+                <header role="banner" class="mb-5">
                     <table class="w-full">
                         <thead>
                             <tr>
@@ -58,7 +58,7 @@
                             </tr>
                         </thead>
                     </table>
-                    <div class="mt-2" aria-label="About the post" role="doc-introduction">
+                    <div class="mt-2" aria-label="About the post">
                         <ul class="text-sm flex flex-row flex-wrap -mx-1 mt-1 mb-2">
                             <li class="mx-1" name="author" itemprop="author" itemscope
                                 itemtype="http://schema.org/Person">
@@ -122,7 +122,7 @@
                     <div class="flex items-center">
                         <form action="{{ route('posts.like', ['post' => $post]) }}" method="POST">
                             @csrf
-                            <button type="submit" class="flex items-center space-x-2 bg-blue-500 dark:text-white rounded-lg px-4 py-2">
+                            <button type="submit" class="flex items-center space-x-2 bg-blue-500 dark:text-white rounded-lg px-4 py-2" title="Like">
                                 @if ($user_has_liked)
                                     <i class="fa-solid fa-thumbs-up"></i>
                                 @else
@@ -135,7 +135,7 @@
                     <div class="flex items-center">
                         <form action="{{ route('posts.bookmark', ['post' => $post]) }}" method="POST">
                             @csrf
-                            <button type="submit" class="flex items-center space-x-2 dark:bg-blue-500 dark:text-white rounded-lg px-4 py-2">
+                            <button type="submit" class="flex items-center space-x-2 dark:bg-blue-500 dark:text-white rounded-lg px-4 py-2" title="Bookmark">
                                 @if (App\Models\Bookmark::where('user_id', Auth::id())->where('post_id', $post->id)->exists())
                                     <i class="fa-solid fa-bookmark"></i>
                                 @else

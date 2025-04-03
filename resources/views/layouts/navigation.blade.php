@@ -5,8 +5,12 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="/">
-                        <x-application-logo class="block h-10 w-auto fill-current text-gray-600 dark:text-gray-300" />
+                    <a href="/" aria-label="Go to homepage">
+                        <span class="sr-only">Home</span>
+                        <span aria-hidden="true">
+                            <x-application-logo class="block h-10 w-auto fill-current text-gray-600 dark:text-gray-300" />
+                        </span>
+                    </a>
                     </a>
                     <x-nav-link :href="route('home')" class="font-bold text-gray-700 dark:text-gray-200 ml-3 border-none">
                         {{ config('app.name') }}
@@ -68,6 +72,10 @@
                                         {{ __('Bookmarks') }}
                                     </x-dropdown-link>
 
+                                    <x-dropdown-link :href="route('user.stats', ['user' => Auth::user()])">
+                                        {{ __('Stats') }}
+                                    </x-dropdown-link>
+
                                     <x-dropdown-link :href="route('logout')"
                                             onclick="event.preventDefault();
                                                         this.closest('form').submit();">
@@ -83,7 +91,7 @@
                     <div class="flex items-center">
                         <x-dropdown align="right" width="48">
                             <x-slot name="trigger">
-                                <button class="flex items-center text-sm font-medium text-gray-500 dark:text-gray-300 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out" style="position: relative;">
+                                <button class="flex items-center text-sm font-medium text-gray-500 dark:text-gray-300 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out" title="Notifications" style="position: relative;">
                                     <i class="fa-solid fa-bell"></i>
                                     @php
                                         $unreadCount = Auth::user()->notifications->where('is_read', false)->count();
