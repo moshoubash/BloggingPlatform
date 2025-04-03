@@ -29,54 +29,102 @@
                 @endauth
 
                 @guest
-                @if(Route::has('register'))
-                    <x-nav-link :href="route('login')" :active="request()->routeIs('login')" class="ml-auto">
-                        Log in
-                    </x-nav-link>
+                    @if(Route::has('register'))
+                        <x-nav-link :href="route('login')" :active="request()->routeIs('login')" class="ml-auto">
+                            Log in
+                        </x-nav-link>
 
-                    <x-nav-link :href="route('register')" :active="request()->routeIs('register')" class="ml-auto">
-                        Register
-                    </x-nav-link>
-                @endif
+                        <x-nav-link :href="route('register')" :active="request()->routeIs('register')" class="ml-auto">
+                            Register
+                        </x-nav-link>
+                    @endif
                 @endguest
 
                 <!-- Settings Dropdown -->
                 @auth
-                <div class="hidden sm:flex sm:items-center sm:ml-6">
-                    <x-dropdown align="right" width="48">
-                        <x-slot name="trigger">
-                            <button class="flex items-center text-sm font-medium text-gray-500 dark:text-gray-300 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
-                                <div>{{ Auth::user()->name }}</div>
+                    <div class="hidden sm:flex sm:items-center sm:ml-6">
+                        <x-dropdown align="right" width="48">
+                            <x-slot name="trigger">
+                                <button class="flex items-center text-sm font-medium text-gray-500 dark:text-gray-300 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
+                                    <div>{{ Auth::user()->name }}</div>
 
-                                <div class="ml-1">
-                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                            </button>
-                        </x-slot>
+                                    <div class="ml-1">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </button>
+                            </x-slot>
 
-                        <x-slot name="content">
-                            <!-- Authentication -->
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <x-dropdown-link :href="route('profile', ['user' => Auth::user()])">
-                                    {{ __('Profile') }}
-                                </x-dropdown-link>
+                            <x-slot name="content">
+                                <!-- Authentication -->
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <x-dropdown-link :href="route('profile', ['user' => Auth::user()])">
+                                        {{ __('Profile') }}
+                                    </x-dropdown-link>
 
-                                <x-dropdown-link :href="route('bookmarks.index', ['user' => Auth::user()])">
-                                    {{ __('Bookmarks') }}
-                                </x-dropdown-link>
+                                    <x-dropdown-link :href="route('bookmarks.index', ['user' => Auth::user()])">
+                                        {{ __('Bookmarks') }}
+                                    </x-dropdown-link>
 
-                                <x-dropdown-link :href="route('logout')"
-                                        onclick="event.preventDefault();
-                                                    this.closest('form').submit();">
-                                    {{ __('Log Out') }}
-                                </x-dropdown-link>
-                            </form>
-                        </x-slot>
-                    </x-dropdown>
-                </div>
+                                    <x-dropdown-link :href="route('logout')"
+                                            onclick="event.preventDefault();
+                                                        this.closest('form').submit();">
+                                        {{ __('Log Out') }}
+                                    </x-dropdown-link>
+                                </form>
+                            </x-slot>
+                        </x-dropdown>
+                    </div>
+                @endauth
+
+                @auth
+                    <div class="flex items-center">
+                        <x-dropdown align="right" width="48">
+                            <x-slot name="trigger">
+                                <button class="flex items-center text-sm font-medium text-gray-500 dark:text-gray-300 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out" style="position: relative;">
+                                    <i class="fa-solid fa-bell"></i>
+                                    @php
+                                        $unreadCount = Auth::user()->notifications->where('is_read', false)->count();
+                                    @endphp
+                                    @if ($unreadCount > 0)
+                                        <span class="inline-flex items-center justify-center text-xs font-bold leading-none rounded-full" style="background-color: #f00; color: #fff; border-radius: 50%; transform: translateY(-200px); transform:translateX(50%); width: 10px; height: 10px; text-align: center; position: absolute; top: 0; right: 0; font-size: 0.6rem; line-height: 10px;">  
+                                            {{ $unreadCount }}
+                                        </span>
+                                    @endif
+                                </button>
+                            </x-slot>
+
+                            <x-slot name="content">
+                                @forelse (Auth::user()->notifications->sortByDesc('created_at') as $notification)
+                                    <div class="flex items-center justify-between px-4 py-2 text-sm {{ $notification->is_read ? 'bg-gray-100 dark:bg-gray-300' : 'bg-white dark:bg-gray-400' }} text-gray-700 dark:text-gray-500">
+                                        <div class="flex items-center">
+                                            @if ($notification->type === 'like')
+                                                <i class="fa-solid fa-thumbs-up text-blue-500 mr-2"></i>
+                                            @elseif ($notification->type === 'comment')
+                                                <i class="fa-solid fa-comment text-green-500 mr-2"></i>
+                                            @elseif ($notification->type === 'follow')
+                                                <i class="fa-solid fa-user-plus text-purple-500 mr-2"></i>
+                                            @endif
+                                            <span>{{ $notification->content }}</span>
+                                        </div>
+                                        <form method="POST" action="{{ route('notifications.markAsRead', $notification->id) }}">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="text-xs text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                                                <i class="fa-solid fa-eye"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                @empty
+                                    <div class="px-4 py-2 text-sm text-gray-500">
+                                        {{ __('No notifications') }}
+                                    </div>
+                                @endforelse
+                            </x-slot>
+                        </x-dropdown>
+                    </div>
                 @endauth
 
                 @can('create', \App\Models\Post::class)

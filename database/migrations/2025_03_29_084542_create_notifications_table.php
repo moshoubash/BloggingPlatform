@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->enum('type', ['comment', 'like', 'follow', 'mention']);
-            $table->unsignedBigInteger('related_id');
             $table->boolean('is_read')->default(false);
             $table->timestamp('created_at')->useCurrent();
         });

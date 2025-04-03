@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Post;
 use App\Models\Follower;
 use App\Models\Bookmark;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -139,6 +140,15 @@ class UserController extends Controller
             $follower->followed_id = $user->id;
             $follower->save();
         }
+
+        $notification = Notification::create([
+            'type' => 'Follow',
+            'user_id' => $user->id,
+            'content' => Auth::user()->name . " Started following you!",
+        ]);
+
+        $notification->timestamps = false;
+        $notification->save();
 
         return back();
     }

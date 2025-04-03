@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ReadmeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SocialAuthController;
@@ -53,6 +54,8 @@ Route::post('/posts/{post}/like', [PostController::class, 'like'])->middleware([
 
 Route::post('/posts/{post}/bookmark', [PostController::class, 'bookmark'])->middleware(['auth'])->name('posts.bookmark');
 Route::get('/user/{user}/bookmarks', [UserController::class, 'bookmarks'])->middleware(['auth'])->name('bookmarks.index');
+
+Route::patch('/notifications/{notification}/mark-as-read', [NotificationController::class, 'markAsRead'])->middleware(['auth'])->name('notifications.markAsRead');
 
 if (config('blog.readme')) {
     Route::get('/readme', ReadmeController::class);

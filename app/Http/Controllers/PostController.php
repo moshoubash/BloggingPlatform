@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Bookmark;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
@@ -122,8 +123,10 @@ class PostController extends Controller
         $markdown = (new MarkdownConverter($post->body))->toHtml();
         $relatedPosts = Post::where('id', '!=', $post->id)
             ->where(function ($query) use ($post) {
-                foreach ($post->tags as $tag) {
-                    $query->orWhereJsonContains('tags', $tag);
+                if (!empty($post->tags)) {
+                    foreach ($post->tags as $tag) {
+                        $query->orWhereJsonContains('tags', $tag);
+                    }
                 }
             })
             ->get();
@@ -256,6 +259,16 @@ class PostController extends Controller
         $like = $post->likes()->make([
             'user_id' => Auth::user()->id,
         ]);
+
+        $notification = Notification::create([
+            'type' => 'Like',
+            'user_id' => $post->user->id,
+            'content' => Auth::user()->name . " liked your post #" . $post->id,
+        ]);
+
+        $notification->timestamps = false;
+        $notification->save();
+
         $like->timestamps = false;
         $like->save();
 
