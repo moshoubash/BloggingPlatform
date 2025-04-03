@@ -13,6 +13,11 @@ use App\Http\Controllers\MarkdownConverter;
 use App\Models\PageView;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Support\Facades\Auth;
+use Rubix\ML\Datasets\Unlabeled;
+use Rubix\ML\Transformers\TextNormalizer;
+use Rubix\ML\Transformers\WordCountVectorizer;
+use Rubix\ML\Transformers\TfIdfTransformer;
+use Rubix\ML\Tokenizers\Word;
 
 class PostController extends Controller
 {
@@ -83,25 +88,108 @@ class PostController extends Controller
      * @param  \App\Http\Requests\StorePostRequest  $request
      * @return Illuminate\Http\Response
      */
-    public function store(StorePostRequest $request)
+    public function store(Request $request)
     {
-        // The incoming request is valid and authorized...
+        // Validate and get the post content
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'body' => 'required|string',
+        ]);
 
-        // Retrieve the validated input data...
-        $validated = $request->validated();
+        $blogContent = $validatedData['body'];
 
-        // Check if post has tags set, and serialize them to array
-        if (isset($validated['tags'])) {
-            $validated['tags'] = json_decode($validated['tags'], true);
+        // Define stopwords
+        $stopwords = ["i", "me", "my", "myself", "we", "our", "ours", "ourselves",
+        "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself",
+        "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their",
+        "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these",
+        "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has",
+        "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if",
+        "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about",
+        "against", "between", "into", "through", "during", "before", "after", "above",
+        "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under",
+        "again", "further", "then", "once", "here", "there", "when", "where", "why", "how",
+        "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no",
+        "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can",
+        "will", "just", "don", "should", "now", "it's", "we're", "we'll", "they're", "can't", 
+        "won't", "isn't", "don't", "he's", "she's", "i'm", "aren't", "government", "house", 
+        'committee', 'would', 'speaker', 'motion', 'mr', 'mrs', 'ms', 'member', 'minister', 
+        'canada', 'members', 'time', 'prime', 'one', 'parliament', 'us', 'bill', 'act', 'like', 
+        'canadians', 'people', 'said', 'want', 'could', 'issue', 'today', 'hon', 'order', 'party', 
+        'canadian', 'think', 'also', 'new', 'get', 'many', 'say', 'look', 'country', 'legislation',
+        'law', 'department', 'two', 'day', 'days', 'madam', 'must', "that's", "okay",
+        "thank", "really", "much", "there's", 'yes', 'no'];
+
+        // Pre-process the current post
+        $processedContent = $this->removeStopwords($blogContent, $stopwords);
+
+        // Step 1: Normalize text
+        $samples = [[$processedContent]];
+        $normalizer = new TextNormalizer();
+        $normalizer->transform($samples);
+        $normalizedText = $samples[0][0];
+
+        // Step 2: Retrieve all posts to create a corpus
+        $allPosts = Post::all()->pluck('body')->toArray();
+
+        // Preprocess all posts
+        $corpus = [];
+        foreach ($allPosts as $postContent) {
+            $processedPost = $this->removeStopwords($postContent, $stopwords);
+            $samples = [[$processedPost]];
+            $normalizer->transform($samples);
+            $corpus[] = $samples[0][0];
         }
 
+        // Add the current post to the corpus
+        $corpus[] = $normalizedText;
+
+        // Step 3: Create dataset for the corpus
+        $dataset = new Unlabeled(array_map(fn($text) => [$text], $corpus));
+
+        // Step 4: Tokenize and vectorize the corpus
+        $vectorizer = new WordCountVectorizer(PHP_INT_MAX, 1, 0.8);
+        $dataset->apply($vectorizer);
+
+        // Step 5: Apply TF-IDF to the corpus
+        $tfidf = new TfIdfTransformer();
+        $dataset->apply($tfidf);
+
+        // Step 6: Extract TF-IDF scores for the current post
+        $samples = $dataset->samples();
+        $currentPostVector = $samples[array_key_last($samples)]; // Last sample is the current post
+
+        // Tokenize the current post to get words
+        $tokenizer = new Word();
+        $words = $tokenizer->tokenize($normalizedText);
+
+        // Remove duplicates from words while preserving order
+        $uniqueWords = array_values(array_unique($words));
+
+        // Pair words with their TF-IDF scores
+        $wordScores = [];
+        foreach ($uniqueWords as $index => $word) {
+            if (isset($currentPostVector[$index])) {
+                $wordScores[$word] = $currentPostVector[$index];
+            }
+        }
+
+        // Sort by score in descending order
+        arsort($wordScores);
+
+        // Get top 5 words
+        $tags = array_slice(array_keys($wordScores), 0, 5);
+
+        // Convert tags to array
+        $validatedData['tags'] = $tags;
+
         // Set default featured image if none is provided
-        if (empty($validated['featured_image'])) {
-            $validated['featured_image'] = 'https://placehold.co/960x640';
+        if (empty($validatedData['featured_image'])) {
+            $validatedData['featured_image'] = 'https://placehold.co/960x640';
         }
 
         // Create the post
-        return (new CreatesNewPost)->store($request->user(), $validated);
+        return (new CreatesNewPost)->store($request->user(), $validatedData);
     }
 
     /**
@@ -300,5 +388,16 @@ class PostController extends Controller
         $bookmark->save();
 
         return back();
+    }
+
+    private function removeStopwords(string $text, array $stopwords): string
+    {
+        $stopwordsLookup = array_flip(array_map('strtolower', $stopwords));
+        $words = preg_split('/\s+/', $text);
+        $filteredWords = array_filter($words, function($word) use ($stopwordsLookup) {
+            $word = preg_replace('/[^\p{L}\p{N}]/u', '', strtolower($word));
+            return $word !== '' && !isset($stopwordsLookup[$word]);
+        });
+        return implode(' ', $filteredWords);
     }
 }

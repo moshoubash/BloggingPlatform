@@ -255,7 +255,7 @@
                                 <a href="{{ route('profile', ['user' => $relatedPost->author]) }}">By {{ $relatedPost->author->name }}</a>
                                 <span class="mx-2">|</span>
                                 <time datetime="{{ $relatedPost->published_at }}">
-                                    {{ $relatedPost->published_at->format('M d, Y') }}
+                                    {{ $relatedPost->published_at ? $relatedPost->published_at->format('M d, Y') : 'N/A' }}
                                 </time>
                             </div>
                         </article>
