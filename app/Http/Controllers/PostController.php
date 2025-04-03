@@ -115,12 +115,19 @@ class PostController extends Controller
 
         // Generate formatted HTML from markdown
         $markdown = (new MarkdownConverter($post->body))->toHtml();
-
+        $relatedPosts = Post::where('id', '!=', $post->id)
+            ->where(function ($query) use ($post) {
+                foreach ($post->tags as $tag) {
+                    $query->orWhereJsonContains('tags', $tag);
+                }
+            })
+            ->get();
         return view('post.show', [
             'post' => $post,
             'markdown' => $markdown,
             'like_count' => $post->likes()->count(),
             'user_has_liked' => Auth::check() ? $post->likes()->where('likes.user_id', Auth::id())->exists() : false,
+            'relatedPosts' => $relatedPosts,
         ]);
     }
 

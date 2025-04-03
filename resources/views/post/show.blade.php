@@ -120,12 +120,11 @@
                     {!! $markdown !!}
                 </section>
 
-                <section id="likes" class="border-t-2 dark:border-gray-600 mt-5 pt-5 pb-2">
-                    <h2 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Likes</h2>
+                <section id="likesAndBookmarks" class="border-t-2 dark:border-gray-600 mt-5 pt-5 pb-2 flex flex-row justify-between items-center" style="gap: 1rem;">
                     <div class="flex items-center">
                         <form action="{{ route('posts.like', ['post' => $post]) }}" method="POST">
                             @csrf
-                            <button type="submit" class="flex items-center space-x-2">
+                            <button type="submit" class="flex items-center space-x-2 bg-blue-500 dark:text-white rounded-lg px-4 py-2">
                                 @if ($user_has_liked)
                                     <i class="fa-solid fa-thumbs-up"></i>
                                 @else
@@ -135,14 +134,10 @@
                             </button>
                         </form>
                     </div>
-                </section>
-
-                <section id="bookmark" class="border-t-2 dark:border-gray-600 mt-5 pt-5 pb-2">
-                    <h2 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Bookmark</h2>
                     <div class="flex items-center">
                         <form action="{{ route('posts.bookmark', ['post' => $post]) }}" method="POST">
                             @csrf
-                            <button type="submit" class="flex items-center space-x-2">
+                            <button type="submit" class="flex items-center space-x-2 dark:bg-blue-500 dark:text-white rounded-lg px-4 py-2">
                                 @if (App\Models\Bookmark::where('user_id', Auth::id())->where('post_id', $post->id)->exists())
                                     <i class="fa-solid fa-bookmark"></i>
                                 @else
@@ -244,6 +239,32 @@
                 <a href="/" class="opacity-75 hover:opacity-100 transition-opacity">Back to Home</a>
             </div>
 
+            @if (config('blog.withTags') && $post->tags)
+            <section id="related-posts" class="mt-8">
+                <h2 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white mb-4">Related Posts</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    @foreach ($relatedPosts as $relatedPost)
+                        <article class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+                            <a href="{{ route('posts.show', $relatedPost) }}" class="block">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                    {{ $relatedPost->title }}
+                                </h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                                    {{ Str::limit($relatedPost->description, 100) }}
+                                </p>
+                            </a>
+                            <div class="mt-4 text-sm text-gray-500 dark:text-gray-400">
+                                <a href="{{ route('profile', ['user' => $relatedPost->author]) }}">By {{ $relatedPost->author->name }}</a>
+                                <span class="mx-2">|</span>
+                                <time datetime="{{ $relatedPost->published_at }}">
+                                    {{ $relatedPost->published_at->format('M d, Y') }}
+                                </time>
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
+            </section>
+        @endif
         </div>
     </div>
 </x-app-layout>

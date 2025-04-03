@@ -3,7 +3,7 @@
         <section class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             @if($bookmarkedPosts)
             <header class="text-center py-5 mt-5 mb-3">
-                <h2 class="text-2xl font-medium dark:text-white">Latest Blog Posts</h2>
+                <h2 class="text-2xl font-medium dark:text-white">Bookmarked Posts</h2>
             </header>
 
             <div class="flex flex-row flex-wrap justify-start">

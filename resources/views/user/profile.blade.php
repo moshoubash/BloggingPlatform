@@ -46,11 +46,13 @@
                     </button>
                 </form>
                 @else
-                    <div class="mt-2">
-                        <a href="{{ route('user.edit', ['user' => $user]) }}" class="px-3 py-1 rounded-full transition duration-300" style="background-color: #1DA1F2; color: white; border-radius: 5px;">
-                            Edit Profile
-                        </a>
-                    </div>
+                    @auth
+                        <div class="mt-2">
+                            <a href="{{ route('user.edit', ['user' => $user]) }}" class="px-3 py-1 rounded-full transition duration-300" style="background-color: #1DA1F2; color: white; border-radius: 5px;">
+                                Edit Profile
+                            </a>
+                        </div>   
+                    @endauth
                 @endif
 
                 <div class="flex justify-center space-x-8 mt-2 text-sm text-gray-300">
