@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\LandingPageController;
 
-Route::get('/', [LandingPageController::class, 'index'])->name('home');
+// Route::get('/', [LandingPageController::class, 'index'])->name('home');
 /*
 |----------------------------------------------------------------------
 | Web Routes
