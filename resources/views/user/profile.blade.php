@@ -21,7 +21,7 @@
             @endauth
 
             <!-- Profile Picture and User Info Section -->
-            <div class="flex flex-col items-center bg-gray-700 pb-6 px-4 text-center dark:text-white" style="transform: translateY(-35%);">
+            <div class="flex flex-col items-center pb-6 px-4 text-center dark:text-white" style="position: relative; top: -125px; border-radius: 20px; padding: 20px; width: 100%; max-width: 400px; margin: auto;">
                 <div class="w-32 h-32 border-white flex items-center justify-center mb-4" style="width: 200px; height: 200px; border-radius: 50%; border: 4px solid white; overflow: hidden;">
                     @if($profile_image)
                         <img src="{{ asset('storage/'.$user->profile_image) }}" alt="user profile picture" style="width: 100%; height: 100%; object-fit: cover;">
@@ -142,7 +142,7 @@
         <!-- Main Content Section -->
         <div class="flex flex-col md:flex-row">
             <!-- Left Side - Posts -->
-            <div class="w-full md:w-2/3 p-4">
+            <div class="w-full p-4">
                 <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">{{ $user->name }} Posts</h3>
 
                 @if(isset($user->posts) && $user->posts->count() > 0)

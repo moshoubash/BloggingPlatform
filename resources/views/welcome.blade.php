@@ -11,9 +11,6 @@
                 </h1>
                 <h2 class="text-2xl font-medium text-gray-700 dark:text-white">Latest Blog Posts</h2>
             </header>
-            <header class="text-center py-5 mt-5 mb-3">
-                <h2 class="text-2xl font-medium dark:text-white">Latest Blog Posts</h2>
-            </header>
 
             <livewire:latest-blog-posts />
 
