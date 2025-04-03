@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 
+use App\Http\Controllers\LandingPageController;
+
+Route::get('/', [LandingPageController::class, 'index'])->name('home');
 /*
 |----------------------------------------------------------------------
 | Web Routes
