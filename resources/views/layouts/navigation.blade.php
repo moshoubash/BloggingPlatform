@@ -105,8 +105,8 @@
                             </x-slot>
 
                             <x-slot name="content">
-                                @forelse (Auth::user()->notifications->sortByDesc('created_at') as $notification)
-                                    <div class="flex items-center justify-between px-4 py-2 text-sm {{ $notification->is_read ? 'bg-gray-100 dark:bg-gray-300' : 'bg-white dark:bg-gray-400' }} text-gray-700 dark:text-gray-500">
+                                @forelse (Auth::user()->notifications->sortByDesc('created_at')->take(5) as $notification)
+                                    <div class="flex items-center justify-between px-4 py-2 text-sm {{ $notification->is_read ? 'bg-gray-100 dark:bg-gray-200' : 'bg-white dark:bg-gray-200' }} text-gray-700 dark:text-gray-500">
                                         <div class="flex items-center">
                                             @if ($notification->type === 'like')
                                                 <i class="fa-solid fa-thumbs-up text-blue-500 mr-2"></i>

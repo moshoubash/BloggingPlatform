@@ -53,7 +53,7 @@
                     <header role="banner" class="mb-5">
                         <table class="w-full">
                             <thead>
-                                <tr>w
+                                <tr>
                                     <th class="text-left">
                                         @if ($post->isPublished())
                                             <h1 itemprop="headline" class="text-3xl font-bold">{{ $post->title }}</h1>
