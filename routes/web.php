@@ -41,7 +41,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // Comments Routes
-Route::resource('comments', CommentController::class)->only(['edit', 'destroy']);
+Route::resource('comments', CommentController::class);
 
 // Dashboard (Requires Authentication & Authorization)
 Route::get('/dashboard', [DashboardController::class, 'show'])
