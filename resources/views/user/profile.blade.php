@@ -86,7 +86,7 @@
                                             https://i.ibb.co/sddfSJ9L/user.png
                                         @endif
                                         " alt="user profile picture" style="width: 50px; height: 50px; object-fit: cover; border-radius:50%;">
-                                        <span class="dark:text-black">{{ $follower->name }}</span>
+                                        <span class="dark:text-black"><a href="/profile/{{$follower->id}}">{{ $follower->name }}</a></span>
                                     </div>
                                     <form action="{{ route('users.follow', $follower->id) }}" method="POST">
                                         @csrf
@@ -116,7 +116,7 @@
                                             https://i.ibb.co/sddfSJ9L/user.png
                                         @endif
                                         " alt="user profile picture" style="width: 50px; height: 50px; object-fit: cover; border-radius:50%;" class="mr-2">
-                                        <span class="dark:text-black">{{ $following->name }}</span>
+                                        <span class="dark:text-black"><a href="/profile/{{$following->id}}">{{ $following->name }}</a></span>
                                     </div>
                                     <form action="{{ route('users.follow', $following->id) }}" method="POST">
                                         @csrf

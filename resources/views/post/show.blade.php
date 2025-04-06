@@ -50,10 +50,10 @@
                     <meta itemprop="identifier" content="{{ $post->slug }}">
                     <meta itemprop="url" content="{{ route('posts.show', $post) }}">
 
-                    <header role="doc-pageheader" class="mb-5">
+                    <header role="banner" class="mb-5">
                         <table class="w-full">
                             <thead>
-                                <tr>
+                                <tr>w
                                     <th class="text-left">
                                         @if ($post->isPublished())
                                             <h1 itemprop="headline" class="text-3xl font-bold">{{ $post->title }}</h1>

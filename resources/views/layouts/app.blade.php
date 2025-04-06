@@ -23,7 +23,7 @@
         <livewire:styles />
 
         <!-- Scripts -->
-        <script src="{{ asset('js/app.js') }}" defer></script>
+        <script src="{{ asset('js/') }}" defer></script>
 
         <script>
             // On page load or when changing themes, best to add inline in `head` to avoid FOUC

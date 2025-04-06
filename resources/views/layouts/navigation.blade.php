@@ -136,8 +136,8 @@
                 @endauth
 
                 @can('create', \App\Models\Post::class)
-                <x-nav-link :href="route('posts.create')" :active="request()->routeIs('posts.create')">
-                    <x-button>
+                <x-nav-link :href="route('posts.create')" :active="request()->routeIs('posts.create')" class="px-4 py-2">
+                    <x-button class="w-full">
                         {{ __('New Post') }}
                     </x-button>
                 </x-nav-link>
