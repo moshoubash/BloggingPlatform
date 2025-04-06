@@ -188,6 +188,10 @@ class PostController extends Controller
             $validatedData['featured_image'] = 'https://placehold.co/960x640';
         }
 
+        if($request->stripe_subscription_id == 1){
+            $validatedData['is_premium'] = true;
+        }
+
         // Create the post
         return (new CreatesNewPost)->store($request->user(), $validatedData);
     }
@@ -267,15 +271,15 @@ class PostController extends Controller
     public function update(UpdatePostRequest $request, Post $post)
     {
         // The incoming request is valid and authorized...
-
+        
         // Retrieve the validated input data...
         $validated = $request->validated();
-
+        
         // Check if post has tags set, and serialize them to array
         if (isset($validated['tags'])) {
             $validated['tags'] = json_decode($validated['tags'], true);
         }
-
+        
         // Update the post
         $post->update($validated);
 

@@ -9,17 +9,6 @@
                 @endif
             </div>
 
-            @auth
-                @if (Auth::user()->id === $user_id)
-                    <!-- Edit Button -->
-                    <button class="absolute top-4 right-4 bg-transparent p-2 rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                        </svg>
-                    </button>
-                @endif
-            @endauth
-
             <!-- Profile Picture and User Info Section -->
             <div class="flex flex-col items-center pb-6 px-4 text-center dark:text-white" style="position: relative; top: -125px; border-radius: 20px; padding: 20px; width: 100%; max-width: 400px; margin: auto;">
                 <div class="w-32 h-32 border-white flex items-center justify-center mb-4" style="width: 200px; height: 200px; border-radius: 50%; border: 4px solid white; overflow: hidden;">

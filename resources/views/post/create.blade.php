@@ -12,7 +12,16 @@
 
                     <fieldset>
                         <legend class="dark:text-white">Required Fields</legend>
-
+                        @auth
+                            @if(Auth::user()->stripe_subscription_id != null)
+                                <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Is Post Premium</label>
+                                <select name="stripe_subscription_id" class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                    <option value="1" {{ Auth::user()->stripe_subscription_id ? 'selected' : '' }}>Premium</option>    
+                                    <option value="0" {{ !Auth::user()->stripe_subscription_id ? 'selected' : '' }}>Free</option>    
+                                </select>
+                            @endif
+                        @endauth
+                        
                         <div class="mt-3">
                             <x-label for="title" :value="__('Title*')" />
                             <x-input id="title" name="title" :value="old('title')" type="text" class="block mt-1 w-full" maxlength="255" required autofocus placeholder="The post title"/>

@@ -21,6 +21,16 @@
                     <fieldset>
                         <legend class="dark:text-white">Required Fields</legend>
 
+                        @auth
+                            @if(Auth::user()->stripe_subscription_id != null)
+                                <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Is Post Premium</label>
+                                <select name="is_premium" class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                    <option value="1" {{ $post->is_premium ? 'selected' : '' }}>Premium</option>    
+                                    <option value="0" {{ !$post->is_premium ? 'selected' : '' }}>Free</option>    
+                                </select>
+                            @endif
+                        @endauth
+
                         <div class="mt-3">
                             <x-label for="title">
                                 {{ __('Title*') }} <small>(Note that the slug will not change)</small>

@@ -76,7 +76,7 @@ A modern, feature-rich blogging platform built with **Laravel 11**, **PHP**, and
 
 ```bash
 git clone https://github.com/moshoubash/BloggingPlatform.git
-cd laravel-blogkit
+cd BloggingPlatform
 composer install
 npm install && npm run prod
 cp .env.example .env

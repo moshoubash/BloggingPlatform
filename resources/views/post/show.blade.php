@@ -101,7 +101,7 @@
                                     <li class="mx-1 opacity-75" name="view_count">
                                         <span itemprop="interactionStatistic" itemscope itemtype="http://schema.org/InteractionCounter">
                                             <meta itemprop="interactionType" content="http://schema.org/ViewAction" />
-                                            <span itemprop="userInteractionCount">{{ number_format($post->getViewCount()) }}</span>
+                                            <span itemprop="userInteractionCount">{{ $postViews }}</span>
                                         </span>
                                         views
                                     </li>

@@ -25,6 +25,8 @@
         <!-- Scripts -->
         <script src="{{ asset('js/') }}" defer></script>
 
+        @yield('landing-style')
+
         <script>
             // On page load or when changing themes, best to add inline in `head` to avoid FOUC
             // Credit: https://flowbite.com/docs/customize/dark-mode/

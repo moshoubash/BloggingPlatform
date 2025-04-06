@@ -26,7 +26,10 @@ use App\Http\Controllers\LandingPageController;
 
 // Home Route
 Route::get('/', function () {
-    return view('welcome', ['posts' => Post::count()]);
+    if (Auth::check()) {
+        return view('welcome', ['posts' => Post::count()]);
+    }
+    return view('landing');
 })->name('home');
 
 // Google Authentication
@@ -81,26 +84,9 @@ Route::post('/logout', function () {
     return redirect()->route('home');
 })->middleware('auth')->name('logout');
 
+Route::get("/home", function() {
+    return view('welcome');
+})->middleware('auth');
+
 // Authentication Routes
-require __DIR__.'/auth.php';
-
-
-
-
-
-
-
-use App\Http\Controllers\LandingController;
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-// Landing page route
-Route::get('/', [LandingController::class, 'index'])->name('home');
-// Your existing routes...
+require __DIR__.'/auth.php'; 

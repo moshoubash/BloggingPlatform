@@ -31,6 +31,7 @@
                 @endif
                 <input type="file" name="cover_image" id="cover_image"
                        class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:border-gray-300 file:text-sm file:font-medium file:bg-gray-50 hover:file:bg-gray-100">
+                <p class="text-gray-700">*Note: recommend 1085 × 200 px photo</p>
             </div>
 
             <div class="mb-4">
