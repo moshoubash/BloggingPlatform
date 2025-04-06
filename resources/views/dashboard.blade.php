@@ -7,22 +7,22 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 dark:text-white">
             {{-- Dashboard Navigation Buttons --}}
             <div class="mb-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+                <button onclick="showSection('analytics')"
+                    class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded text-center block"><i
+                        class="fa-solid fa-chart-simple"></i>
+                    Overview</button>
                 <button onclick="showSection('posts')"
                     class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded text-center block"><i
-                        class="fa-solid fa-newspaper"></i> Manage
+                        class="fa-solid fa-newspaper"></i>
                     Posts</button>
                 <button onclick="showSection('users')"
                     class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded text-center block"><i
-                        class="fa-solid fa-users"></i> Manage
+                        class="fa-solid fa-users"></i>
                     Users</button>
                 <button onclick="showSection('comments')"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded text-center block"><i
-                        class="fa-solid fa-comments"></i> Manage
+                        class="fa-solid fa-comments"></i>
                     Comments</button>
-                <button onclick="showSection('analytics')"
-                    class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded text-center block"><i
-                        class="fa-solid fa-chart-simple"></i> Analytics
-                    Overview</button>
             </div>
 
 
@@ -505,16 +505,39 @@
 
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                                     <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
-                                        <div class="text-2xl font-bold">{{ number_format($analytics['total_views']) }}
+                                        <div class="text-2xl font-bold"><i class="fa-solid fa-eye"></i>
+                                            {{ number_format($analytics['total_views']) }}
                                         </div>
                                         <div class="text-gray-600 dark:text-gray-400">Total Page Views</div>
                                     </div>
                                     <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
-                                        <div class="text-2xl font-bold">
-                                            {{ number_format($analytics['unique_visitors']) }}</div>
-                                        <div class="text-gray-600 dark:text-gray-400">Unique Visitors</div>
+                                        <div class="text-2xl font-bold"><i class="fa-solid fa-file-lines"></i>
+                                            {{ number_format($analytics['total_posts']) }}</div>
+                                        <div class="text-gray-600 dark:text-gray-400">Total Posts</div>
+                                    </div>
+                                    <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                                        <div class="text-2xl font-bold"><i class="fa-solid fa-users"></i>
+                                            {{ number_format($analytics['total_users']) }}</div>
+                                        <div class="text-gray-600 dark:text-gray-400">Total Users</div>
                                     </div>
                                 </div>
+
+                                <div class="container mx-auto px-4 py-8">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <!-- Doughnut Chart -->
+                                        <div class="rounded-2xl p-4">
+                                            <h2 class="text-lg font-semibold mb-4">Top 3 Posters</h2>
+                                            <canvas id="topPostersChart" width="300" height="300"></canvas>
+                                        </div>
+
+                                        <!-- Line Chart -->
+                                        <div class="rounded-2xl p-6">
+                                            <h2 class="text-xl font-semibold mb-4">Posts Per Day</h2>
+                                            <canvas id="postsPerDay" width="300" height="300"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+
 
                                 <!-- Traffic Chart -->
                                 <div class="mb-6">
@@ -687,6 +710,96 @@
                                     scales: {
                                         y: {
                                             beginAtZero: true
+                                        }
+                                    }
+                                }
+                            });
+                        </script>
+                        <script>
+                            const topPosters = [{
+                                    name: 'Alice',
+                                    posts: 45
+                                },
+                                {
+                                    name: 'Bob',
+                                    posts: 30
+                                },
+                                {
+                                    name: 'Charlie',
+                                    posts: 25
+                                }
+                            ];
+
+                            const doughnutCtx = document.getElementById('topPostersChart').getContext('2d');
+                            new Chart(doughnutCtx, {
+                                type: 'doughnut',
+                                data: {
+                                    labels: topPosters.map(p => p.name),
+                                    datasets: [{
+                                        label: 'Number of Posts',
+                                        data: topPosters.map(p => p.posts),
+                                        backgroundColor: ['#9ca3af', '#d1d5db', '#f3f4f6'],
+                                        borderColor: ['#6b7280', '#9ca3af', '#d1d5db'],
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    plugins: {
+                                        legend: {
+                                            position: 'bottom'
+                                        },
+                                        title: {
+                                            display: true,
+                                            text: 'Top 3 Users by Posts'
+                                        }
+                                    }
+                                }
+                            });
+
+                            const lineCtx = document.getElementById('postsPerDay').getContext('2d');
+                            new Chart(lineCtx, {
+                                type: 'line',
+                                data: {
+                                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+                                    datasets: [{
+                                        label: 'Posts',
+                                        data: [12, 19, 7, 15, 10],
+                                        borderColor: '#ffffff',
+                                        backgroundColor: 'transparent', // Set to transparent
+                                        tension: 0.4, // Smooth curve
+                                        borderWidth: 3,
+                                        pointBackgroundColor: 'rgba(255,255,255,0.9)', // Point color
+                                        pointRadius: 6
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    plugins: {
+                                        legend: {
+                                            display: false
+                                        },
+                                        title: {
+                                            display: true,
+                                            text: 'Posts Per Day',
+                                            font: {
+                                                size: 16,
+                                                weight: 'bold'
+                                            },
+                                            color: '#fff'
+                                        }
+                                    },
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true,
+                                            ticks: {
+                                                color: '#fff'
+                                            }
+                                        },
+                                        x: {
+                                            ticks: {
+                                                color: '#fff'
+                                            }
                                         }
                                     }
                                 }

@@ -81,6 +81,8 @@ class DashboardController extends Controller
                         'views' => $trafficData->map->count(),
                         'unique' => $trafficData->map(fn ($views) => $views->groupBy('anonymous_id')->count()),
                     ],
+                    'total_users' => User::all()->count(),
+                    'total_posts' => Post::all()->count()
                 ];
             }
         }
