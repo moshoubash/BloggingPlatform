@@ -40,7 +40,7 @@
         }
         .floating-picture {
             padding: 20px;
-            height: 450px;
+            height: 380px;
             width: 400px;
             animation: floatPicture 8s ease-in-out infinite;
             transform-origin: bottom center;
@@ -114,22 +114,7 @@
             </div>
         </section>
     </main>
-    <footer class="bg-custom">
-        <div class="max-w-7xl mx-auto px-5 py-12">
-            <div class="flex flex-wrap justify-center gap-5 mb-8">
-                <a href="#" class="footer-link">Help</a>
-                <a href="#" class="footer-link">Status</a>
-                <a href="#" class="footer-link">About</a>
-                <a href="#" class="footer-link">Careers</a>
-                <a href="#" class="footer-link">Press</a>
-                <a href="#" class="footer-link">Blog</a>
-                <a href="#" class="footer-link">Privacy</a>
-                <a href="#" class="footer-link">Rules</a>
-                <a href="#" class="footer-link">Terms</a>
-                <a href="#" class="footer-link">Text to speech</a>
-            </div>
-        </div>
-    </footer>
+
 </body>
 </html>
 </x-app-layout>
