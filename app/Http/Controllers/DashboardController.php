@@ -24,9 +24,9 @@ class DashboardController extends Controller
         if (!Gate::allows('access-dashboards')) {
             abort(403);
         }
-        
+
         $data = [];
-        
+
         // If the user is an admin they can manage all posts and users
         if ($request->user()->is_admin) {
             $data['posts'] = Post::all();
@@ -37,10 +37,22 @@ class DashboardController extends Controller
                 $data['comments'] = Comment::all();
             }
 
+            $topPosters = User::withCount('posts')
+                ->orderBy('posts_count', 'desc')
+                ->take(3)
+                ->get()
+                ->map(function ($user) {
+                    return [
+                        'id' => $user->id,
+                        'name' => $user->name ?? $user->username,
+                        'posts' => $user->posts_count,
+                    ];
+                });
+
             // Add analytics data if enabled
             if (config('analytics.enabled')) {
                 $pageViews = PageView::all();
-                
+
                 // Get traffic data for the last 30 days
                 $thirtyDaysAgo = now()->subDays(30);
                 $trafficData = PageView::where('created_at', '>=', $thirtyDaysAgo)
@@ -79,10 +91,11 @@ class DashboardController extends Controller
                     'traffic_data' => [
                         'dates' => $trafficData->keys(),
                         'views' => $trafficData->map->count(),
-                        'unique' => $trafficData->map(fn ($views) => $views->groupBy('anonymous_id')->count()),
+                        'unique' => $trafficData->map(fn($views) => $views->groupBy('anonymous_id')->count()),
                     ],
                     'total_users' => User::all()->count(),
-                    'total_posts' => Post::all()->count()
+                    'total_posts' => Post::all()->count(),
+                    'topPosters' => $topPosters
                 ];
             }
         }

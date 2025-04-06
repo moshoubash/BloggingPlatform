@@ -527,22 +527,15 @@
                                         <!-- Doughnut Chart -->
                                         <div class="rounded-2xl p-4">
                                             <h2 class="text-lg font-semibold mb-4">Top 3 Posters</h2>
-                                            <canvas id="topPostersChart" width="300" height="300"></canvas>
+                                            <canvas id="topPostersChart" height="400" style="max-height: 400px;"></canvas>
                                         </div>
 
-                                        <!-- Line Chart -->
-                                        <div class="rounded-2xl p-6">
-                                            <h2 class="text-xl font-semibold mb-4">Posts Per Day</h2>
-                                            <canvas id="postsPerDay" width="300" height="300"></canvas>
+                                        <!-- Traffic Chart -->
+                                        <div class="mb-6">
+                                            <h4 class="text-lg font-semibold mb-2">Traffic (Last 30 Days)</h4>
+                                            <canvas id="trafficChart" height="400" style="max-height: 400px;"></canvas>
                                         </div>
                                     </div>
-                                </div>
-
-
-                                <!-- Traffic Chart -->
-                                <div class="mb-6">
-                                    <h4 class="text-lg font-semibold mb-2">Traffic (Last 30 Days)</h4>
-                                    <canvas id="trafficChart" height="200" style="max-height: 200px;"></canvas>
                                 </div>
 
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -716,28 +709,16 @@
                             });
                         </script>
                         <script>
-                            const topPosters = [{
-                                    name: 'Alice',
-                                    posts: 45
-                                },
-                                {
-                                    name: 'Bob',
-                                    posts: 30
-                                },
-                                {
-                                    name: 'Charlie',
-                                    posts: 25
-                                }
-                            ];
-
                             const doughnutCtx = document.getElementById('topPostersChart').getContext('2d');
+                            const topPosters = @json($analytics['topPosters']);
+
                             new Chart(doughnutCtx, {
                                 type: 'doughnut',
                                 data: {
-                                    labels: topPosters.map(p => p.name),
+                                    labels: [topPosters[0].name, topPosters[1].name, topPosters[2].name],
                                     datasets: [{
                                         label: 'Number of Posts',
-                                        data: topPosters.map(p => p.posts),
+                                        data: [topPosters[0].posts, topPosters[1].posts, topPosters[2].posts],
                                         backgroundColor: ['#9ca3af', '#d1d5db', '#f3f4f6'],
                                         borderColor: ['#6b7280', '#9ca3af', '#d1d5db'],
                                         borderWidth: 1
@@ -752,54 +733,6 @@
                                         title: {
                                             display: true,
                                             text: 'Top 3 Users by Posts'
-                                        }
-                                    }
-                                }
-                            });
-
-                            const lineCtx = document.getElementById('postsPerDay').getContext('2d');
-                            new Chart(lineCtx, {
-                                type: 'line',
-                                data: {
-                                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-                                    datasets: [{
-                                        label: 'Posts',
-                                        data: [12, 19, 7, 15, 10],
-                                        borderColor: '#ffffff',
-                                        backgroundColor: 'transparent', // Set to transparent
-                                        tension: 0.4, // Smooth curve
-                                        borderWidth: 3,
-                                        pointBackgroundColor: 'rgba(255,255,255,0.9)', // Point color
-                                        pointRadius: 6
-                                    }]
-                                },
-                                options: {
-                                    responsive: true,
-                                    plugins: {
-                                        legend: {
-                                            display: false
-                                        },
-                                        title: {
-                                            display: true,
-                                            text: 'Posts Per Day',
-                                            font: {
-                                                size: 16,
-                                                weight: 'bold'
-                                            },
-                                            color: '#fff'
-                                        }
-                                    },
-                                    scales: {
-                                        y: {
-                                            beginAtZero: true,
-                                            ticks: {
-                                                color: '#fff'
-                                            }
-                                        },
-                                        x: {
-                                            ticks: {
-                                                color: '#fff'
-                                            }
                                         }
                                     }
                                 }
