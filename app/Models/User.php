@@ -17,9 +17,24 @@ use App\Models\Notification;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;  // Removed Billable trait
 
-    protected $fillable = ['username', 'email', 'password', 'name', 'bio', 'role_id', 'google_id', 'is_author', 'profile_image', 'cover_image'];
+
+    protected $fillable = [
+        'username', 
+        'email', 
+        'password', 
+        'name', 
+        'bio', 
+        'role_id', 
+        'google_id', 
+        'is_author', 
+        'profile_image', 
+        'cover_image',
+        'stripe_customer_id',  // Stripe customer ID
+        'stripe_subscription_id', // Stripe subscription ID
+        'stripe_plan_id',          // Stripe plan ID
+    ];
 
     protected $hidden = [
         'password',
@@ -33,7 +48,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'is_banned' => 'boolean',
     ];
 
-    public function posts(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function posts()
     {
         return $this->hasMany(Post::class, 'user_id', 'id');
     }
@@ -73,6 +88,28 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(User::class, 'followers', 'follower_id', 'followed_id');
     }
 
+    // Subscription Methods (adjusted for manual checking without Cashier)
+    public function hasPremiumSubscription()
+    {
+        return $this->stripe_subscription_id && $this->isSubscriptionActive();
+    }
+
+    public function isSubscriptionActive()
+    {
+        // Implement logic to check if the Stripe subscription is active
+        // For example, check the subscription's status (this would require integration with Stripe API)
+        return true; // This is just a placeholder
+    }
+
+    public function hasValidStripeSubscription()
+    {
+        return $this->stripe_subscription_id && $this->stripe_plan_id;
+    }
+
+    public function hasPremiumPlan()
+    {
+        return $this->stripe_plan_id === 'price_1R9mLtPrNcimFvkcWtBo6iLF'; // Use the actual Stripe premium plan Price ID
+    }
     public function isFollowing($user)
     {
         return $this->following->contains($user);

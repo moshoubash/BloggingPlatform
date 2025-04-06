@@ -7,7 +7,9 @@ use App\Models\User;
 use App\Models\Post;
 use App\Models\Follower;
 use App\Models\Bookmark;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
+use App\Models\PageView;
 
 class UserController extends Controller
 {
@@ -140,6 +142,15 @@ class UserController extends Controller
             $follower->save();
         }
 
+        $notification = Notification::create([
+            'type' => 'Follow',
+            'user_id' => $user->id,
+            'content' => Auth::user()->name . " Started following you!",
+        ]);
+
+        $notification->timestamps = false;
+        $notification->save();
+
         return back();
     }
 
@@ -156,6 +167,46 @@ class UserController extends Controller
         return view('user.bookmarks', [
             'bookmarkedPosts' => $userBookmarks,
             'user' => $user,
+        ]);
+    }
+
+    public function stats()
+    {
+        $user = Auth::user();
+        $postsCount = Post::where('user_id', $user->id)->count();
+        $followersCount = Follower::where('followed_id', $user->id)->count();
+        $followingCount = Follower::where('follower_id', $user->id)->count();
+
+        $userPosts = Post::where('user_id', $user->id)->get();
+        $viewsCount = 0;
+        foreach ($userPosts as $post) {
+            $post_url = '/posts/' . $post->slug;
+            $viewsCount += PageView::where('page', $post_url)->count();
+        }
+
+        $currentDay = now()->startOfDay();
+        $weekDays = [];
+        $postsPerDay = [];
+
+        for ($i = 0; $i < 7; $i++) {
+            $day = $currentDay->copy()->subDays($i);
+            $weekDays[] = $day->format('l'); // Get the day name
+            $postsPerDay[] = Post::where('user_id', $user->id)
+            ->whereDate('created_at', $day)
+            ->count();
+        }
+
+        $weekDays = array_reverse($weekDays);
+        $postsPerDay = array_reverse($postsPerDay);
+
+        return view('user.stats', [
+            'postsCount' => $postsCount,
+            'followersCount' => $followersCount,
+            'followingCount' => $followingCount,
+            'viewsCount' => $viewsCount,
+            'user' => $user,
+            'days' => $weekDays,
+            'postsPerDay' => $postsPerDay,
         ]);
     }
 }

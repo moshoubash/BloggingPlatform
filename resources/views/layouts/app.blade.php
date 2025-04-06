@@ -7,7 +7,7 @@
         
         @stack('meta')
         <meta property="og:site_name" content="{{ config('app.name', 'Laravel') }}">
-
+        <meta name="description" content="Blogging platform for Writing and Interacting with articles.">
         <title>
             {{ (isset($title) ? $title . ' - ' : '') . config('app.name', 'Laravel') }}
         </title>

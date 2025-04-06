@@ -2,47 +2,51 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ReadmeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SocialAuthController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Post;
-use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 
+use App\Http\Controllers\LandingPageController;
+
+// Route::get('/', [LandingPageController::class, 'index'])->name('home');
 /*
-|--------------------------------------------------------------------------
+|----------------------------------------------------------------------
 | Web Routes
-|--------------------------------------------------------------------------
+|----------------------------------------------------------------------
 |
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
+| Here is where you can register web routes for your application.
 |
 */
 
+// Home Route
 Route::get('/', function () {
-    return view('welcome', [
-        'posts' => Post::count()
-    ]);
+    return view('welcome', ['posts' => Post::count()]);
 })->name('home');
 
+// Google Authentication
 Route::get('/auth/google', [SocialAuthController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
 
-
+// Posts Routes
 Route::resource('posts', PostController::class);
-Route::post('/posts/{post}/publish', [PostController::class, 'publish'])->name('posts.publish');
-Route::post('/posts/{post}/unpublish', [PostController::class, 'unpublish'])->name('posts.unpublish');
+Route::middleware('auth')->group(function () {
+    Route::post('/posts/{post}/publish', [PostController::class, 'publish'])->name('posts.publish');
+    Route::post('/posts/{post}/unpublish', [PostController::class, 'unpublish'])->name('posts.unpublish');
+});
 
-Route::resource('comments', CommentController::class)->only([
-    'edit',
-    'destroy',
-]);
+// Comments Routes
+Route::resource('comments', CommentController::class)->only(['edit', 'destroy']);
 
-Route::get('/dashboard', [DashboardController::class, 'show'])->middleware(['auth', 'can:access-dashboards'])->name('dashboard');
+// Dashboard (Requires Authentication & Authorization)
+Route::get('/dashboard', [DashboardController::class, 'show'])
+    ->middleware(['auth', 'can:access-dashboards'])
+    ->name('dashboard');
 
 Route::get('/profile/{user}', [UserController::class, 'profile'])->name('profile');
 Route::post('/users/{user}/follow', [UserController::class, 'toggleFollow'])->middleware(['auth'])->name('users.follow');
@@ -54,10 +58,30 @@ Route::post('/posts/{post}/like', [PostController::class, 'like'])->middleware([
 Route::post('/posts/{post}/bookmark', [PostController::class, 'bookmark'])->middleware(['auth'])->name('posts.bookmark');
 Route::get('/user/{user}/bookmarks', [UserController::class, 'bookmarks'])->middleware(['auth'])->name('bookmarks.index');
 
+Route::patch('/notifications/{notification}/mark-as-read', [NotificationController::class, 'markAsRead'])->middleware(['auth'])->name('notifications.markAsRead');
+Route::get('/user/stats', [UserController::class, 'stats'])->middleware(['auth'])->name('user.stats');
 if (config('blog.readme')) {
-    Route::get('/readme', ReadmeController::class);
+    Route::get('/readme', [ReadmeController::class, '__invoke'])->name('readme');
 }
 
+// Stripe Checkout Routes
+Route::middleware('auth')->prefix('checkout')->group(function () {
+    Route::get('/', [PaymentController::class, 'checkout'])->name('checkout'); // Displays checkout page
+    Route::post('/process', [PaymentController::class, 'process'])->name('checkout.process'); // Processes Stripe payment
+    Route::get('/success', [PaymentController::class, 'success'])->name('checkout.success'); // Handles payment success
+    Route::get('/cancel', [PaymentController::class, 'cancel'])->name('checkout.cancel'); // Handles payment cancellation
+});
+
+// Logout Route
+Route::post('/logout', function () {
+    Auth::logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+
+    return redirect()->route('home');
+})->middleware('auth')->name('logout');
+
+// Authentication Routes
 require __DIR__.'/auth.php';
 
 

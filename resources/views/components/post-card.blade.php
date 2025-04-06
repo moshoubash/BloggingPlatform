@@ -1,7 +1,20 @@
+@php
+    $views = App\Models\PageView::all();
+    $post_url = '/' . 'posts/' . $post->slug;
+    $views = $views->where('page', $post_url)->count();   
+@endphp
+
 <article class="w-full sm:w-80 bg-white rounded-lg shadow-md dark:bg-gray-800 m-4 my-5 flex flex-col flex-grow">
     <header>
         <a href="{{ route('posts.show', $post) }}">
-            <span class="rounded-t-lg featured-post-image" role="img" style="background-image: url('{{ $post->featured_image }}');" alt="Featured Image"></span>
+            <span class="rounded-t-lg featured-post-image relative dark:opacity-75" role="img" style="background-image: url('{{ $post->featured_image }}');" alt="Featured Image">@if($post->is_premium)
+                <span class="text-yellow-500" title="Premium Post" style="position: absolute; top:15px; left: 15px; padding: 5px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#FFD700" height="30px" width="30px" version="1.1" id="Capa_1" viewBox="0 0 220 220" xml:space="preserve">
+                        <path d="M220,98.865c0-12.728-10.355-23.083-23.083-23.083s-23.083,10.355-23.083,23.083c0,5.79,2.148,11.084,5.681,15.14  l-23.862,21.89L125.22,73.002l17.787-20.892l-32.882-38.623L77.244,52.111l16.995,19.962l-30.216,63.464l-23.527-21.544  c3.528-4.055,5.671-9.344,5.671-15.128c0-12.728-10.355-23.083-23.083-23.083C10.355,75.782,0,86.137,0,98.865  c0,11.794,8.895,21.545,20.328,22.913l7.073,84.735H192.6l7.073-84.735C211.105,120.41,220,110.659,220,98.865z"/>
+                    </svg>
+                </span>
+            @endif
+            </span>     
         </a>
     </header>
     <div class="p-5 h-full flex flex-col">
@@ -12,16 +25,17 @@
 
         <a href="{{ route('posts.show', $post) }}">
             <h3 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white break-words">
-                @if($post->isPublished())
+            @if($post->isPublished())
                 {{ $post->title }}
-                @else
+            @else
                 <span class="opacity-75" title="This post has not yet been published">
-                    Draft:
+                Draft:
                 </span>
                 <i>{{ $post->title }}</i>
-                @endif
+            @endif
             </h3>
         </a>
+
 
         <p class="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400 overflow-hidden text-ellipsis">
             By <x-link :href="route('profile', ['user' => $post->author])" rel="author">{{ $post->author->name }}</x-link>
@@ -34,7 +48,7 @@
                     @if(config('analytics.enabled'))
                         <span class="{{ config('blog.allowComments') ? 'mr-2' : '' }}" role="none" aria-hidden="true" title="{{ number_format($post->getViewCount()) }} views">
                             <svg class="inline fill-gray-500 dark:text-gray-300" role="presentation" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-                            {{ number_format($post->getViewCount()) }}
+                            {{ $views }}
                         </span>
                     @endif
 

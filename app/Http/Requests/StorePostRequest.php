@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Carbon\Carbon;
+use App\Models\Post;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StorePostRequest extends FormRequest
@@ -14,7 +15,7 @@ class StorePostRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('create', App\Models\Post::class);
+        return $this->user()->can('create', Post::class);
     }
 
     /**
