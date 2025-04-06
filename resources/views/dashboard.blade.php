@@ -5,26 +5,36 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 dark:text-white">
-            @if(session('success'))
-            <div class="bg-green-300 overflow-hidden shadow-sm sm:rounded-lg mb-5">
-                <div class="py-3 px-4 text-green-900">
-                    {{ session('success') }}
-                </div>
-            </div>
-            @endif
+        {{-- Dashboard Navigation Buttons --}}
+<div class="mb-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+    <button onclick="showSection('posts')" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded text-center block">Manage Posts</button>
+    <button onclick="showSection('users')" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded text-center block">Manage Users</button>
+    <button onclick="showSection('comments')" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded text-center block">Manage Comments</button>
+    <button onclick="showSection('analytics')" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded text-center block">Analytics Overview</button>
+</div>
 
-            @if(config('blog.demoMode'))
-            <section class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-5 text-black dark:text-white">
-                <div class="p-6">
-                    <h3 class="text-xl font-bold mb-1">App is in demo mode!</h3>
-                    <strong>User created posts are hidden from the blog index and the database is reset every six hours.</strong>
+
+<div id="dashboard-wrapper">
+                @if(session('success'))
+                <div class="bg-green-300 overflow-hidden shadow-sm sm:rounded-lg mb-5">
+                    <div class="py-3 px-4 text-green-900">
+                        {{ session('success') }}
+                    </div>
                 </div>
-            </section>
-            @endif
+                @endif
+
+
+                @if(config('blog.demoMode'))
+                <section class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-5 text-black dark:text-white">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-1">App is in demo mode!</h3>
+                        <strong>User created posts are hidden from the blog index and the database is reset every six hours.</strong>
+                    </div>
+                </section>
+                @endif
 
             @if($posts)
-            <section class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-5">
-                <div class="p-6 bg-white dark:bg-gray-800">
+            <section id="posts" class="dashboard-section">                <div class="p-6 bg-white dark:bg-gray-800">
                     <header class="flex flex-row justify-between items-center">
                         <h3 class="text-xl font-bold mb-5">Manage Posts</h3>
                         @can('create', App\Models\Post::class)
@@ -160,8 +170,7 @@
             @endif
 
             @if($users)
-            <section class="p-6 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg my-5 mt-10">
-                <header class="bg-white dark:bg-gray-800">
+            <section id="users" class="dashboard-section" style="display: none;">                <header class="bg-white dark:bg-gray-800">
                    <h3 class="text-xl font-bold mb-5">Manage Users</h3> 
                 </header>
 
@@ -290,8 +299,8 @@
 
             
             @if($comments)
-            <section class="p-6 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg my-5 mt-10">
-                <header class="bg-white dark:bg-gray-800">
+            <section id="comments" class="dashboard-section" style="display: none;">
+            <header class="bg-white dark:bg-gray-800">
                    <h3 class="text-xl font-bold mb-5">Manage Comments</h3> 
                 </header>
                 
@@ -408,8 +417,8 @@
             @endif
 
             @if(isset($analytics))
-            <section class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg my-5">
-                <div class="p-6">
+            <section id="analytics" class="dashboard-section" style="display: none;">
+            <div class="p-6">
                     <header class="flex justify-between items-center mb-4">
                         <h3 class="text-xl font-bold">Analytics Overview</h3>
                     </header>
@@ -521,37 +530,21 @@
             </section>
 
             @push('scripts')
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
             <script>
-                const ctx = document.getElementById('trafficChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: @json($analytics['traffic_data']['dates']),
-                        datasets: [{
-                            label: 'Page Views',
-                            data: @json($analytics['traffic_data']['views']),
-                            borderColor: 'rgb(59, 130, 246)',
-                            tension: 0.1
-                        }, {
-                            label: 'Unique Visitors',
-                            data: @json($analytics['traffic_data']['unique']),
-                            borderColor: 'rgb(239, 68, 68)',
-                            tension: 0.1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        interaction: {
-                            intersect: false,
-                            mode: 'index'
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
+                function showSection(sectionId) {
+                    const allSections = document.querySelectorAll('.dashboard-section');
+                    allSections.forEach(section => {
+                        section.style.display = 'none';
+                    });
+
+                    const activeSection = document.getElementById(sectionId);
+                    if (activeSection) {
+                        activeSection.style.display = 'block';
                     }
+                }
+
+                document.addEventListener('DOMContentLoaded', () => {
+                    showSection('posts');
                 });
             </script>
             @endpush
@@ -566,6 +559,14 @@
                  * 
                  * @param integer (user) id
                  */
+                function openEditUserModal(id) {
+                    Livewire.dispatch('openEditUserModal', { id: id });
+                }
+            </script>
+            @endpush
+            @push('scripts')
+            <livewire:edit-user-form-modal />
+            <script>
                 function openEditUserModal(id) {
                     Livewire.dispatch('openEditUserModal', { id: id });
                 }
