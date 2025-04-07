@@ -31,6 +31,16 @@
             </h3>
         </a>
 
+        <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+            By <x-link :href="route('profile', ['user' => $post->author])" rel="author">{{ $post->author->name }}</x-link>
+            @if($post->isPublished())
+                <span class="opacity-50 mx-2">•</span>
+                <time datetime="{{ $post->published_at }}" title="Published {{ $post->published_at }}">
+                    {{ $post->published_at->format('M d, Y') }}
+                </time>
+            @endif
+        </p>
+
         <p class="mt-2 text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
             {{ $post->description }}
         </p>
