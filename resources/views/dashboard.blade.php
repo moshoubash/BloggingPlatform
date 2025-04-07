@@ -77,7 +77,6 @@
                                                     <x-td>
                                                         <a href="{{ route('posts.index', ['author' => $post->author]) }}"
                                                             rel="author" class="hover:text-indigo-500">
-                                                            {{ $post->author->name }}
                                                         </a>
                                                     </x-td>
                                                     <x-td>
@@ -148,7 +147,6 @@
                                                     <x-td>
                                                         <a href="{{ route('posts.index', ['author' => $post->author]) }}"
                                                             rel="author" class="hover:text-indigo-500">
-                                                            {{ $post->author->name }}
                                                         </a>
                                                     </x-td>
                                                 </tr>
