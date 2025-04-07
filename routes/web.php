@@ -13,6 +13,7 @@ use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\LandingPageController;
+use Illuminate\Support\Facades\Request;
 
 // Route::get('/', [LandingPageController::class, 'index'])->name('home');
 /*
@@ -87,6 +88,14 @@ Route::post('/logout', function () {
 Route::get("/home", function() {
     return view('welcome');
 })->middleware('auth');
+
+// Route::get("/search/?query={query}", function (Request $request) {
+//     return view("welcome", [
+//         'posts' => Post::where('title', 'like', "%{$request->query}%")
+//                       ->orWhere('description', 'like', "%{$request->query}%")
+//                       ->get()
+//     ]);
+// })->name('search');
 
 // Authentication Routes
 require __DIR__.'/auth.php'; 
