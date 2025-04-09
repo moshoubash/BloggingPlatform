@@ -13,7 +13,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+    ini_set('max_execution_time', 300); // 5 minutes
+ini_set('memory_limit', '1024M');   // 1GB
     }
 
     /**
