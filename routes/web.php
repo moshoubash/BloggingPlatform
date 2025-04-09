@@ -48,7 +48,7 @@ Route::middleware('auth')->group(function () {
 Route::resource('comments', CommentController::class);
 
 // Dashboard (Requires Authentication & Authorization)
-Route::get('/dashboard', [DashboardController::class, 'show'])
+Route::get('/dashboard/overview', [DashboardController::class, 'show'])
     ->middleware(['auth', 'can:access-dashboards'])
     ->name('dashboard');
 
@@ -89,13 +89,56 @@ Route::get("/home", function() {
     return view('welcome');
 })->middleware('auth');
 
-// Route::get("/search/?query={query}", function (Request $request) {
-//     return view("welcome", [
-//         'posts' => Post::where('title', 'like', "%{$request->query}%")
-//                       ->orWhere('description', 'like', "%{$request->query}%")
-//                       ->get()
-//     ]);
-// })->name('search');
+Route::prefix('dashboard')->middleware(['auth'])->group(function () {
+    // Users management
+    Route::get('/users', function() {
+        return view('dashboard.users.index');
+    })->name('dashboard.users.index');
+    
+    // Notifications management
+    Route::get('/notifications', function() {
+        return view('dashboard.notifications.index');
+    })->name('dashboard.notifications.index');
+    
+    // Premium management
+    Route::get('/premium', function() {
+        return view('dashboard.premium.index');
+    })->name('dashboard.premium.index');
+    
+    // Posts management
+    Route::get('/posts', function() {
+        return view('dashboard.posts.index');
+    })->name('dashboard.posts.index');
 
-// Authentication Routes
+    // Reports management
+    Route::get('/reports', function() {
+        return view('dashboard.reports.index');
+    })->name('dashboard.reports.index');
+    
+    // Comments management
+    Route::get('/comments', function() {
+        return view('dashboard.comments.index');
+    })->name('dashboard.comments.index');
+    
+    // Statistics and analytics
+    Route::get('/statistics', function() {
+        return view('dashboard.statistics.index');
+    })->name('dashboard.statistics.index');
+
+    // Tags Management
+    Route::get('/tags', function() {
+        return view('dashboard.tags.index');
+    })->name('dashboard.tags.index');
+
+    // Account Settings
+    Route::get('/account', function() {
+        return view('dashboard.account.index');
+    })->name('dashboard.account.index');
+
+    // Blog Settings
+    Route::get('/site/settings', function() {
+        return view('dashboard.site.index');
+    })->name('dashboard.site.index');
+});
+
 require __DIR__.'/auth.php'; 

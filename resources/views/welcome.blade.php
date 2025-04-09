@@ -16,7 +16,7 @@
             
             <!-- Main Logo Title with improved styling -->
             <h1 class="text-4xl sm:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 tracking-tight leading-none">
-              DevBlog
+              {{ env('APP_NAME') }}
             </h1>
             
             <!-- Enhanced subtitle with better typography -->

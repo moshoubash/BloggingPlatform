@@ -28,7 +28,7 @@
                     <span class="sr-only">Home</span>
                     <!-- Main Logo with Enhanced Gradient -->
                     <span aria-hidden="true" class="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-purple-500 to-pink-600 tracking-tighter mb-2 drop-shadow-lg transform transition-all hover:scale-105 duration-300">
-                        DevBlog
+                        {{env('APP_NAME')}}
                     </span>
                     <span class="text-sm text-gray-400 font-medium">
                         Share. Learn. Grow.
