@@ -35,7 +35,6 @@
                     </div>
                 @endif
 
-
                 @if (config('blog.demoMode'))
                     <section
                         class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-5 text-black dark:text-white">
@@ -357,9 +356,6 @@
                         </div>
                     </section>
 
-
-
-
                     @if ($comments)
                         <section id="comments" class="dashboard-section" style="display: none;">
                             <div class="p-6 bg-white dark:bg-gray-800">
@@ -642,7 +638,7 @@
                                 }
 
                                 document.addEventListener('DOMContentLoaded', () => {
-                                    showSection('posts');
+                                    showSection('analytics');
                                 });
                             </script>
                         @endpush
