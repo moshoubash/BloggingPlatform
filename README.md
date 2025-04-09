@@ -84,7 +84,9 @@ php artisan migrate
 php artisan db:seed --class=DemoSeeder
 php artisan key:generate
 php artisan storage:link
+composer require rubix/ml
+composer require stripe/stripe-php
 php artisan admin:create
 php artisan serve
 ```
-
+### (Note) You need to add Stripe and Google data into .env file

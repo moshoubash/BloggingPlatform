@@ -89,13 +89,72 @@ Route::get("/home", function() {
     return view('welcome');
 })->middleware('auth');
 
-// Route::get("/search/?query={query}", function (Request $request) {
-//     return view("welcome", [
-//         'posts' => Post::where('title', 'like', "%{$request->query}%")
-//                       ->orWhere('description', 'like', "%{$request->query}%")
-//                       ->get()
-//     ]);
-// })->name('search');
+Route::prefix('dashboard')->middleware(['auth'])->group(function () {
+    // Dashboard home
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    
+    // Users management
+    Route::prefix('users')->group(function () {
+        Route::get('/', function() {
+            return view('dashboard.users.index');
+        })->name('dashboard.users.index');
+    });
+    
+    // Users management
+    Route::prefix('notifications')->group(function () {
+        Route::get('/', function() {
+            return view('dashboard.notifications.index');
+        })->name('dashboard.notifications.index');
+    });
+    
+    // Users management
+    Route::prefix('premium')->group(function () {
+        Route::get('/', function() {
+            return view('dashboard.premium.index');
+        })->name('dashboard.premium.index');
+    });
+    
+    // Users management
+    Route::prefix('posts')->group(function () {
+        Route::get('/', function() {
+            return view('dashboard.posts.index');
+        })->name('dashboard.posts.index');
+    });
 
-// Authentication Routes
+    // Posts management
+    Route::prefix('reports')->group(function () {
+        Route::get('/', function() {
+            return view('dashboard.reports.index');
+        })->name('dashboard.reports.index');
+    });
+    
+    // Comments management
+    Route::prefix('comments')->group(function () {
+        Route::get('/', function() {
+            return view('dashboard.comments.index');
+        })->name('dashboard.comments.index');
+    });
+    
+    // Statistics and analytics
+    Route::prefix('statistics')->group(function () {
+        Route::get('/', function() {
+            return view('dashboard.statistics.index');
+        })->name('dashboard.statistics.index');
+    });
+
+    // Statistics and analytics
+    Route::prefix('tags')->group(function () {
+        Route::get('/', function() {
+            return view('dashboard.tags.index');
+        })->name('dashboard.tags.index');
+    });
+
+    // Statistics and analytics
+    Route::prefix('account')->group(function () {
+        Route::get('/', function() {
+            return view('dashboard.account.index');
+        })->name('dashboard.account.index');
+    });
+});
+
 require __DIR__.'/auth.php'; 
