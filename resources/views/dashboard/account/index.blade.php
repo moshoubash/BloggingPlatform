@@ -1,3 +1,5 @@
-<div>
-    <!-- Live as if you were to die tomorrow. Learn as if you were to live forever. - Mahatma Gandhi -->
-</div>
+@extends('layouts.dashboardlayout')
+@section('title', 'Account Settings')
+
+@section('content')
+@endsection

@@ -1,3 +1,5 @@
-<div>
-    <!-- The biggest battle is the war against ignorance. - Mustafa Kemal Atatürk -->
-</div>
+@extends('layouts.dashboardlayout')
+@section('title', 'Tags Management')
+
+@section('content')
+@endsection

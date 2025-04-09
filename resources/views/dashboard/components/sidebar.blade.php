@@ -18,7 +18,7 @@
             <span class="hide-menu">Home</span>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="/dashboard" aria-expanded="false">
+            <a class="sidebar-link" href="{{route('dashboard')}}" aria-expanded="false">
               <span>
                 <i class="ti ti-layout-dashboard"></i>
               </span>
@@ -38,7 +38,7 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="#" aria-expanded="false">
+            <a class="sidebar-link" href="{{route('dashboard.posts.index')}}" aria-expanded="false">
               <span>
                 <i class="ti ti-file"></i>
               </span>
@@ -46,7 +46,7 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="#" aria-expanded="false">
+            <a class="sidebar-link" href="{{route('dashboard.comments.index')}}" aria-expanded="false">
               <span>
                 <i class="ti ti-message"></i>
               </span>
@@ -54,7 +54,7 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="#" aria-expanded="false">
+            <a class="sidebar-link" href="{{route('dashboard.notifications.index')}}" aria-expanded="false">
               <span>
                 <i class="ti ti-bell"></i>
               </span>
@@ -62,7 +62,7 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="#" aria-expanded="false">
+            <a class="sidebar-link" href="{{route('dashboard.reports.index')}}" aria-expanded="false">
               <span>
                 <i class="ti ti-file"></i>
               </span>
@@ -70,7 +70,7 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="#" aria-expanded="false">
+            <a class="sidebar-link" href="{{route('dashboard.tags.index')}}" aria-expanded="false">
               <span>
                 <i class="ti ti-tag"></i>
               </span>
@@ -78,7 +78,7 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="#" aria-expanded="false">
+            <a class="sidebar-link" href="{{route('dashboard.premium.index')}}" aria-expanded="false">
               <span>
                 <i class="ti ti-crown"></i>
               </span>
@@ -90,7 +90,7 @@
             <span class="hide-menu">Settings</span>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="#" aria-expanded="false">
+            <a class="sidebar-link" href="{{route('dashboard.account.index')}}" aria-expanded="false">
               <span>
                 <i class="ti ti-user"></i>
               </span>
@@ -98,7 +98,7 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="#" aria-expanded="false">
+            <a class="sidebar-link" href="{{route('dashboard.site.index')}}" aria-expanded="false">
               <span>
                 <i class="ti ti-settings"></i>
               </span>

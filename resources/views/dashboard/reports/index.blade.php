@@ -1,5 +1,5 @@
 @extends('layouts.dashboardlayout')
-@section('title', 'Site Settings')
+@section('title', 'Reports Management')
 
 @section('content')
 @endsection

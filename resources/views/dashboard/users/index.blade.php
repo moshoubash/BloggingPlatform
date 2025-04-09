@@ -1,3 +1,5 @@
-<div>
-    <!-- Always remember that you are absolutely unique. Just like everyone else. - Margaret Mead -->
-</div>
+@extends('layouts.dashboardlayout')
+@section('title', 'Users Management')
+
+@section('content')
+@endsection
