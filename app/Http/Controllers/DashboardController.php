@@ -101,7 +101,7 @@ class DashboardController extends Controller
         }
         // Otherwise if the user is an author we show their posts
         elseif ($request->user()->is_author) {
-            $data['posts'] = $request->user()->posts;
+            return redirect()->route('home');
         }
 
         // Return the view with the data we prepared

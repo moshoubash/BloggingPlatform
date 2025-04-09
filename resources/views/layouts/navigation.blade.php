@@ -20,7 +20,7 @@
 
             
             <!-- Search Bar Component -->
-            <form class="relative flex items-center"  method="GET">
+            {{-- <form class="relative flex items-center"  method="GET">
                 <input
                 type="text"
                 placeholder="Search..."
@@ -35,7 +35,7 @@
                         </svg>
                     </button>
                 </div>
-            </form>
+            </form> --}}
 
             <!-- Navigation Links -->
             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex ml-auto">
