@@ -59,6 +59,14 @@ class PostController extends Controller
         ]);
     }
 
+    public function dashboardPosts(){
+        $posts = Post::paginate(10);
+
+        return view('dashboard.posts.index', [
+            'posts' => $posts,
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

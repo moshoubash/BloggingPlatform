@@ -45,9 +45,14 @@ class CommentController extends Controller
         return back()->with('success', 'Successfully Deleted Comment!');
     }
     public function index()
-{
-    $comments = \App\Models\Comment::with(['user', 'post'])->latest()->get();
-    return view('comments.index', compact('comments'));
-}
+    {
+        $comments = \App\Models\Comment::with(['user', 'post'])->latest()->get();
+        return view('comments.index', compact('comments'));
+    }
+
+    public function comments(){
+        $comments = Comment::paginate(10);
+        return view('dashboard.comments.index', compact('comments'));
+    }
 
 }

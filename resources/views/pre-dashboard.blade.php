@@ -704,36 +704,36 @@
                                 }
                             });
                         </script>
-                        <script>
-                            const doughnutCtx = document.getElementById('topPostersChart').getContext('2d');
-                            const topPosters = @json($analytics['topPosters']);
+                            <script>
+                                const doughnutCtx = document.getElementById('topPostersChart').getContext('2d');
+                                const topPosters = @json($analytics['topPosters']);
 
-                            new Chart(doughnutCtx, {
-                                type: 'doughnut',
-                                data: {
-                                    labels: [topPosters[0].name, topPosters[1].name, topPosters[2].name],
-                                    datasets: [{
-                                        label: 'Number of Posts',
-                                        data: [topPosters[0].posts, topPosters[1].posts, topPosters[2].posts],
-                                        backgroundColor: ['#9ca3af', '#d1d5db', '#f3f4f6'],
-                                        borderColor: ['#6b7280', '#9ca3af', '#d1d5db'],
-                                        borderWidth: 1
-                                    }]
-                                },
-                                options: {
-                                    responsive: true,
-                                    plugins: {
-                                        legend: {
-                                            position: 'bottom'
-                                        },
-                                        title: {
-                                            display: true,
-                                            text: 'Top 3 Users by Posts'
+                                new Chart(doughnutCtx, {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: [topPosters[0].name, topPosters[1].name, topPosters[2].name],
+                                        datasets: [{
+                                            label: 'Number of Posts',
+                                            data: [topPosters[0].posts, topPosters[1].posts, topPosters[2].posts],
+                                            backgroundColor: ['#9ca3af', '#d1d5db', '#f3f4f6'],
+                                            borderColor: ['#6b7280', '#9ca3af', '#d1d5db'],
+                                            borderWidth: 1
+                                        }]
+                                    },
+                                    options: {
+                                        responsive: true,
+                                        plugins: {
+                                            legend: {
+                                                position: 'bottom'
+                                            },
+                                            title: {
+                                                display: true,
+                                                text: 'Top 3 Users by Posts'
+                                            }
                                         }
                                     }
-                                }
-                            });
-                        </script>
+                                });
+                            </script>
                     @endpush
                 @endif
             </div>

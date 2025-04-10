@@ -8,9 +8,10 @@
   <title>@yield('title')</title>
   <link rel="shortcut icon" type="image/png" href="{{asset('assets/images/logos/favicon.png')}}" />
   <link rel="stylesheet" href="{{asset('assets/css/styles.min.css')}}" />
+  <script src="https://kit.fontawesome.com/d890c03bb3.js" crossorigin="anonymous"></script>
 </head>
 
-<body>
+<body style="background-color:#141a31;">
   <!--  Body Wrapper -->
   <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
     data-sidebar-position="fixed" data-header-position="fixed">

@@ -1,10 +1,10 @@
 <!-- Sidebar Start -->
-<aside class="left-sidebar">
+<aside class="left-sidebar" style="background-color:#141a31">
     <!-- Sidebar scroll-->
     <div>
       <div class="brand-logo d-flex align-items-center justify-content-between">
-        <a href="./index.html" class="text-nowrap logo-img">
-          <img src="{{asset('assets/images/logos/dark-logo.svg')}}" width="180" alt="" />
+        <a href="{{route('dashboard')}}" class="text-nowrap">
+          <h2 class="m-0 text-white">{{env("APP_NAME")}}</h2>
         </a>
         <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
           <i class="ti ti-x fs-8"></i>
@@ -51,14 +51,6 @@
                 <i class="ti ti-message"></i>
               </span>
               <span class="hide-menu">Comments</span>
-            </a>
-          </li>
-          <li class="sidebar-item">
-            <a class="sidebar-link" href="{{route('dashboard.notifications.index')}}" aria-expanded="false">
-              <span>
-                <i class="ti ti-bell"></i>
-              </span>
-              <span class="hide-menu">Notifications</span>
             </a>
           </li>
           <li class="sidebar-item">

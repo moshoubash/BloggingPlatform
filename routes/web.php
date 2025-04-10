@@ -13,6 +13,7 @@ use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\PremiumController;
 use Illuminate\Support\Facades\Request;
 
 // Route::get('/', [LandingPageController::class, 'index'])->name('home');
@@ -57,6 +58,8 @@ Route::post('/users/{user}/follow', [UserController::class, 'toggleFollow'])->mi
 Route::get('/user/edit/{user}', [UserController::class, 'edit'])->middleware(['auth'])->name('user.edit');
 Route::put('/user/update/{user}', [UserController::class, 'update'])->middleware(['auth'])->name('user.update');
 
+Route::post('/user/delete/{user}', [UserController::class, 'destroy'])->middleware(['auth'])->name('user.destroy');
+
 Route::post('/posts/{post}/like', [PostController::class, 'like'])->middleware(['auth'])->name('posts.like');
 
 Route::post('/posts/{post}/bookmark', [PostController::class, 'bookmark'])->middleware(['auth'])->name('posts.bookmark');
@@ -91,34 +94,28 @@ Route::get("/home", function() {
 
 Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     // Users management
-    Route::get('/users', function() {
-        return view('dashboard.users.index');
-    })->name('dashboard.users.index');
+    Route::get('/users', [UserController::class, 'index'])->name('dashboard.users.index');
+    Route::get('/users/edit', [UserController::class, 'edit'])->name('dashboard.users.edit');
+    Route::get('/users/create', [UserController::class, 'dashboardCreate'])->name('dashboard.users.edit');
+    
+    // Posts Management
+    Route::get('/posts', [PostController::class, 'dashboardPosts'])->name('dashboard.posts.index');
+    
+    // Comments Management
+    Route::get('/comments', [CommentController::class, 'comments'])->name('dashboard.comments.index');
+    
+    // Premium Management
+    Route::get('/premium', [PremiumController::class, 'index'])->name('dashboard.premium.index');
     
     // Notifications management
     Route::get('/notifications', function() {
         return view('dashboard.notifications.index');
     })->name('dashboard.notifications.index');
     
-    // Premium management
-    Route::get('/premium', function() {
-        return view('dashboard.premium.index');
-    })->name('dashboard.premium.index');
-    
-    // Posts management
-    Route::get('/posts', function() {
-        return view('dashboard.posts.index');
-    })->name('dashboard.posts.index');
-
     // Reports management
     Route::get('/reports', function() {
         return view('dashboard.reports.index');
     })->name('dashboard.reports.index');
-    
-    // Comments management
-    Route::get('/comments', function() {
-        return view('dashboard.comments.index');
-    })->name('dashboard.comments.index');
     
     // Statistics and analytics
     Route::get('/statistics', function() {

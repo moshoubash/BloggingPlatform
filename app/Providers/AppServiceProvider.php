@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-
+use Illuminate\Pagination\Paginator;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -13,8 +13,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-    ini_set('max_execution_time', 300); // 5 minutes
-ini_set('memory_limit', '1024M');   // 1GB
+        ini_set('max_execution_time', 999999); // 5 minutes
+        ini_set('memory_limit', '1024M');   // 1GB
     }
 
     /**
@@ -24,6 +24,6 @@ ini_set('memory_limit', '1024M');   // 1GB
      */
     public function boot()
     {
-        //
+        Paginator::useBootstrap(); // or useBootstrapFive() if you're using Bootstrap 5
     }
 }
