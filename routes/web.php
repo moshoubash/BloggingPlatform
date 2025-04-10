@@ -88,10 +88,6 @@ Route::post('/logout', function () {
     return redirect()->route('home');
 })->middleware('auth')->name('logout');
 
-Route::get("/home", function() {
-    return view('welcome');
-})->middleware('auth');
-
 Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     // Users management
     Route::get('/users', [UserController::class, 'index'])->name('dashboard.users.index');

@@ -115,7 +115,7 @@
                                     family: 'Inter, system-ui, sans-serif',
                                     size: 12
                                 },
-                                color: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)'
+                                color: 'white'
                             }
                         },
                         tooltip: {
@@ -144,7 +144,7 @@
                                 drawBorder: false
                             },
                             ticks: {
-                                color: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)',
+                                color: "white",
                                 font: {
                                     family: 'Inter, system-ui, sans-serif'
                                 }
@@ -158,7 +158,7 @@
                             },
                             ticks: {
                                 precision: 0,
-                                color: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)',
+                                color: "white",
                                 font: {
                                     family: 'Inter, system-ui, sans-serif'
                                 }
