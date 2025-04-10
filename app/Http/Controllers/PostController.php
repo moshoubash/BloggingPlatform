@@ -18,6 +18,7 @@ use Rubix\ML\Transformers\TextNormalizer;
 use Rubix\ML\Transformers\WordCountVectorizer;
 use Rubix\ML\Transformers\TfIdfTransformer;
 use Rubix\ML\Tokenizers\Word;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -410,5 +411,29 @@ class PostController extends Controller
             return $word !== '' && !isset($stopwordsLookup[$word]);
         });
         return implode(' ', $filteredWords);
+    }
+
+    public function dashboardEdit($id){
+        $post = Post::find($id);
+        return view('dashboard.posts.edit', ['post' => $post]);
+    }
+
+    public function dashboardUpdate(Request $request, $id){
+        $post = Post::find($id);
+        // Update post fields
+        $post->title = $request->input('title');
+        $post->slug = $request->input('slug') ?: Str::slug($request->input('title'));
+        $post->description = $request->input('description');
+        $post->body = $request->input('body');
+        $post->status = $request->input('status');
+        $post->save();
+
+        return redirect()->route('dashboard.posts.index');
+    }
+
+    public function dashboardDestroy($id){
+        $post = Post::find($id);
+        $post->delete();
+        return redirect()->route('dashboard.posts.index');
     }
 }

@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>@yield('title')</title>
-  <link rel="shortcut icon" type="image/png" href="{{asset('assets/images/logos/favicon.png')}}" />
+  <link rel="icon" type="image/png" href="{{ asset('images/pen.png') }}" />
   <link rel="stylesheet" href="{{asset('assets/css/styles.min.css')}}" />
   <script src="https://kit.fontawesome.com/d890c03bb3.js" crossorigin="anonymous"></script>
 </head>

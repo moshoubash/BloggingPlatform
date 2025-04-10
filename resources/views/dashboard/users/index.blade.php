@@ -64,21 +64,51 @@
                                 </td>
                                 <td class="border-bottom-0">
                                     <h6 class="fw-semibold mb-1">
-                                        @if ($user->is_deleted)
-                                            <span class="badge bg-success">Yes</span>
+                                        @if ($user->is_deleted == 1)
+                                            <span class="badge bg-danger">Deleted</span>
                                         @else
-                                            <span class="badge bg-danger">No</span>
+                                            <span class="badge bg-success">Not Deleted</span>
                                         @endif
                                     </h6>
                                 </td>
                                 <td class="border-bottom-0">
                                     <div class="d-flex align-items-center gap-2">
-                                        <a href="#" class="btn btn-sm btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
-                                        <form action="{{ route('user.destroy', $user->id) }}" class="d-inline" method="POST">
-                                            @csrf
-                                            <button class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></button>
-                                        </form>
+                                        <a href="{{ route('dashboard.users.edit', $user->id) }}"
+                                            class="btn btn-sm btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
+                                        <a href="#" data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal{{ $user->id }}">
+                                            <button class="btn btn-sm btn-danger">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </a>
                                     </div>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="deleteModal{{ $user->id }}" tabindex="-1"
+                                        aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                                                    <button type="button" class="btn-close bg-light"
+                                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure you want to delete this user?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-primary"
+                                                        data-bs-dismiss="modal">Cancel</button>
+                                                    <form action="{{ route('user.destroy', $user->id) }}" method="POST"
+                                                        class="d-inline">
+                                                        @csrf
+                                                        @method('POST')
+                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </td>
                             </tr>
                         @endforeach

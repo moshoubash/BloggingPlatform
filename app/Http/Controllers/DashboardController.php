@@ -95,6 +95,7 @@ class DashboardController extends Controller
                     ],
                     'total_users' => User::all()->count(),
                     'total_posts' => Post::all()->count(),
+                    'total_comments' => Comment::all()->count(),
                     'topPosters' => $topPosters
                 ];
             }
