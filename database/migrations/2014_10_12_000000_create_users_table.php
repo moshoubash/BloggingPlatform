@@ -27,6 +27,8 @@ return new class extends Migration
             $table->boolean('is_admin')->default(false);
             $table->boolean('is_author')->default(false);
             $table->boolean('is_banned')->default(false);
+
+            $table->boolean('is_deleted')->default(false);
             $table->timestamps();
         });
     }

@@ -15,7 +15,7 @@
     $authorUrl = route('profile', ['user' => $post->author]);
     $commentsCount = $post->comments_count ?? ($post->comments ? $post->comments->count() : 0);
     $isCommentsEnabled = config('blog.allowComments');
-    $readTime = $post->read_time ?? ceil(str_word_count(strip_tags($post->content)) / 200) . ' min read';
+    $readTime = floor(str_word_count($post->body) / 80) . ' min read';
 @endphp
 
 <article 

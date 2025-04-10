@@ -18,7 +18,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::paginate(10);
+        
+        return view('dashboard.users.index', [
+            'users' => $users
+        ]);
     }
 
     /**
@@ -90,7 +94,12 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        $user->is_deleted = true;
+        $user->save();
+
+        return redirect()->route('dashboard.users.index');
     }
 
     /**
