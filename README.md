@@ -86,6 +86,7 @@ php artisan key:generate
 php artisan storage:link
 composer require rubix/ml
 composer require stripe/stripe-php
+composer require phpoffice/phpspreadsheet
 php artisan admin:create
 php artisan serve
 ```

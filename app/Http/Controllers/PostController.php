@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Bookmark;
@@ -97,6 +97,7 @@ class PostController extends Controller
      * @param  \App\Http\Requests\StorePostRequest  $request
      * @return Illuminate\Http\Response
      */
+    
     public function store(Request $request)
     {
         // Validate and get the post content
@@ -107,37 +108,19 @@ class PostController extends Controller
 
         $blogContent = $validatedData['body'];
 
-        // Define stopwords
-        $stopwords = ["a", "about", "above", "after", "again", "against", "all", "am", "an", "and",
-        "any", "are", "aren't", "as", "at", "be", "because", "been", "before", "being",
-        "below", "between", "both", "but", "by", "can't", "cannot", "could", "couldn't",
-        "did", "didn't", "do", "does", "doesn't", "doing", "don't", "down", "during",
-        "each", "few", "for", "from", "further", "had", "hadn't", "has", "hasn't",
-        "have", "haven't", "having", "he", "he'd", "he'll", "he's", "her", "here",
-        "here's", "hers", "herself", "him", "himself", "his", "how", "how's", "i",
-        "i'd", "i'll", "i'm", "i've", "if", "in", "into", "is", "isn't", "it", "it's",
-        "its", "itself", "let's", "me", "more", "most", "mustn't", "my", "myself", "no",
-        "nor", "not", "of", "off", "on", "once", "only", "or", "other", "ought", "our",
-        "ours", "ourselves", "out", "over", "own", "same", "shan't", "she", "she'd",
-        "she'll", "she's", "should", "shouldn't", "so", "some", "such", "than", "that",
-        "that's", "the", "their", "theirs", "them", "themselves", "then", "there",
-        "there's", "these", "they", "they'd", "they'll", "they're", "they've", "this",
-        "those", "through", "to", "too", "under", "until", "up", "very", "was",
-        "wasn't", "we", "we'd", "we'll", "we're", "we've", "were", "weren't", "what",
-        "what's", "when", "when's", "where", "where's", "which", "while", "who",
-        "who's", "whom", "why", "why's", "with", "won't", "would", "wouldn't", "you",
-        "you'd", "you'll", "you're", "you've", "your", "yours", "yourself", "yourselves"];
+        // Step 1: Load stopwords from the Excel file
+        $stopwords = $this->loadStopwordsFromExcel(storage_path('app/stopwords.xlsx'));
 
         // Pre-process the current post
         $processedContent = $this->removeStopwords($blogContent, $stopwords);
 
-        // Step 1: Normalize text
+        // Step 2: Normalize text
         $samples = [[$processedContent]];
         $normalizer = new TextNormalizer();
         $normalizer->transform($samples);
         $normalizedText = $samples[0][0];
 
-        // Step 2: Retrieve all posts to create a corpus
+        // Step 3: Retrieve all posts to create a corpus
         $allPosts = Post::all()->pluck('body')->toArray();
 
         // Preprocess all posts
@@ -152,18 +135,18 @@ class PostController extends Controller
         // Add the current post to the corpus
         $corpus[] = $normalizedText;
 
-        // Step 3: Create dataset for the corpus
+        // Step 4: Create dataset for the corpus
         $dataset = new Unlabeled(array_map(fn($text) => [$text], $corpus));
 
-        // Step 4: Tokenize and vectorize the corpus
+        // Step 5: Tokenize and vectorize the corpus
         $vectorizer = new WordCountVectorizer(PHP_INT_MAX, 1, 0.8);
         $dataset->apply($vectorizer);
 
-        // Step 5: Apply TF-IDF to the corpus
+        // Step 6: Apply TF-IDF to the corpus
         $tfidf = new TfIdfTransformer();
         $dataset->apply($tfidf);
 
-        // Step 6: Extract TF-IDF scores for the current post
+        // Step 7: Extract TF-IDF scores for the current post
         $samples = $dataset->samples();
         $currentPostVector = $samples[array_key_last($samples)]; // Last sample is the current post
 
@@ -202,6 +185,36 @@ class PostController extends Controller
 
         // Create the post
         return (new CreatesNewPost)->store($request->user(), $validatedData);
+    }
+
+    private function loadStopwordsFromExcel(string $filePath): array
+    {
+        $spreadsheet = IOFactory::load($filePath);
+        $sheet = $spreadsheet->getActiveSheet();
+        $stopwords = [];
+
+        foreach ($sheet->getColumnIterator('A') as $column) {
+            foreach ($column->getCellIterator() as $cell) {
+                if ($cell->getValue()) {
+                    $stopwords[] = strtolower(trim($cell->getValue()));
+                }
+            }
+        }
+
+        return $stopwords;
+    }
+
+    private function removeStopwords(string $text, array $stopwords): string
+    {
+        $stopwordsLookup = array_flip(array_map('strtolower', $stopwords));
+        
+        $words = preg_split('/\s+/', $text);
+        
+        $filteredWords = array_filter($words, function($word) use ($stopwordsLookup) {
+            $word = preg_replace('/[^\p{L}\p{N}]/u', '', strtolower($word));
+            return $word !== '' && !isset($stopwordsLookup[$word]);
+        });
+        return implode(' ', $filteredWords);
     }
 
     /**
@@ -400,17 +413,6 @@ class PostController extends Controller
         $bookmark->save();
 
         return back();
-    }
-
-    private function removeStopwords(string $text, array $stopwords): string
-    {
-        $stopwordsLookup = array_flip(array_map('strtolower', $stopwords));
-        $words = preg_split('/\s+/', $text);
-        $filteredWords = array_filter($words, function($word) use ($stopwordsLookup) {
-            $word = preg_replace('/[^\p{L}\p{N}]/u', '', strtolower($word));
-            return $word !== '' && !isset($stopwordsLookup[$word]);
-        });
-        return implode(' ', $filteredWords);
     }
 
     public function dashboardEdit($id){
