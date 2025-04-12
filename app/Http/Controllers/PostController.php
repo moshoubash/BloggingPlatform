@@ -18,6 +18,7 @@ use Rubix\ML\Transformers\TextNormalizer;
 use Rubix\ML\Transformers\WordCountVectorizer;
 use Rubix\ML\Transformers\TfIdfTransformer;
 use Rubix\ML\Tokenizers\Word;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -36,59 +37,26 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        // Start with a base query
-        $query = Post::query();
-        $filter = null;
-        $title = null;
-
-        // Apply tag filter if provided
         if ($request->has('filterByTag')) {
-            $tag = $request->get('filterByTag');
-            $query->whereJsonContains('tags', $tag);
-            $filter = 'Filtered by '. __('blog.tag') .' "' . $tag . '"';
-            $title = 'Posts with '. __('blog.tag') .' ' . $tag;
+            return view('post.index', [
+                'title' => 'Posts with '. __('blog.tag') .' ' . $request->get('filterByTag'),
+                'filter' => 'Filtered by '. __('blog.tag') .' "' . $request->get('filterByTag') . '"',
+                'posts' => Post::whereJsonContains('tags', $request->get('filterByTag'))->get(),
+            ]);
         }
 
-        // Apply author filter if provided
         if ($request->has('author')) {
-            $authorId = $request->get('author');
-            $author = User::findOrFail($authorId);
-            $query->where('user_id', $authorId);
-            $filter = 'Filtered by author ' . $author->name;
-            $title = 'Posts by ' . $author->name;
+            $author = User::findOrFail($request->get('author'));
+
+            return view('post.index', [
+                'title' => 'Posts by ' . $author->name,
+                'filter' => 'Filtered by author ' . $author->name,
+                'posts' => $author->posts,
+            ]);
         }
 
-        // Apply sorting if provided
-        $sort = $request->get('sort', 'newest');
-        
-        switch ($sort) {
-            case 'oldest':
-                $query->orderBy('created_at', 'asc');
-                break;
-            case 'popular':
-                // Order by number of likes
-                $query->withCount('likes')
-                      ->orderBy('likes_count', 'desc');
-                break;
-            case 'comments':
-                // Order by number of comments
-                $query->withCount('comments')
-                      ->orderBy('comments_count', 'desc');
-                break;
-            case 'newest':
-            default:
-                $query->orderBy('created_at', 'desc');
-                break;
-        }
-
-        // Get the results
-        $posts = $query->get();
-
-        // Return the view with the filtered and sorted posts
         return view('post.index', [
-            'title' => $title,
-            'filter' => $filter,
-            'posts' => $posts,
+            'posts' => Post::all(),
         ]);
     }
 
@@ -443,5 +411,29 @@ class PostController extends Controller
             return $word !== '' && !isset($stopwordsLookup[$word]);
         });
         return implode(' ', $filteredWords);
+    }
+
+    public function dashboardEdit($id){
+        $post = Post::find($id);
+        return view('dashboard.posts.edit', ['post' => $post]);
+    }
+
+    public function dashboardUpdate(Request $request, $id){
+        $post = Post::find($id);
+        // Update post fields
+        $post->title = $request->input('title');
+        $post->slug = $request->input('slug') ?: Str::slug($request->input('title'));
+        $post->description = $request->input('description');
+        $post->body = $request->input('body');
+        $post->status = $request->input('status');
+        $post->save();
+
+        return redirect()->route('dashboard.posts.index');
+    }
+
+    public function dashboardDestroy($id){
+        $post = Post::find($id);
+        $post->delete();
+        return redirect()->route('dashboard.posts.index');
     }
 }
