@@ -2,20 +2,51 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
-class Tag
+class Tag extends Model
 {
-	public static function all()
-	{
-		$tags = DB::table('posts')->select('tags')->get()->pluck('tags');
+    use HasFactory;
 
-		$tags = $tags->map(function ($item) {
-			return json_decode($item);
-		});
+    protected $fillable = [
+        'name',
+        'slug',
+    ];
 
-		$tags = $tags->flatten()->unique();
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 
-		return $tags;
-	}
+    public function posts()
+    {
+        return $this->belongsToMany(Post::class, 'post_tags', 'tag_id', 'post_id');
+    }
+
+    public function name(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value) => ucfirst($value),
+            set: fn ($value) => strtolower($value)
+        );
+    }
+
+    /**
+     * Legacy method for tags stored as JSON in the posts table.
+     * Use with caution, meant for backward compatibility only.
+     */
+    public static function getAllFromPosts()
+    {
+        $tags = \DB::table('posts')->select('tags')->get()->pluck('tags');
+
+        $tags = $tags->map(function ($item) {
+            return json_decode($item);
+        });
+
+        $tags = $tags->flatten()->unique()->values();
+
+        return $tags;
+    }
 }
