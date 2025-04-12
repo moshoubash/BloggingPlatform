@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://laravel.com" target="_blank">
-        <img src="https://i.ibb.co/zWRWRcVh/Blogging-Platform.png" width="400">
+        <h1>DevBlog</h1>
     </a>
 </p>
 
@@ -35,7 +35,7 @@
     </a>
 </p>
 
-# Blogging Platform
+# DevBlog
 A modern, feature-rich blogging platform built with **Laravel 11**, **PHP**, and **Tailwind CSS**. Designed for bloggers and content creators, it supports user-generated content, premium subscriptions, and powerful admin controls.
 
 ## ✨ Features

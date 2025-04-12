@@ -102,8 +102,7 @@
                                 </td>
                                 <td class="border-bottom-0">
                                     <div class="d-flex align-items-center gap-2">
-                                        <a href="#" class="btn btn-sm btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
-                                        <a href="#" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></a>
+                                        <form action="{{ route('dashboard.users.edit', $user->id) }}" class="d-inline" method="GET">@csrf<button class="btn btn-sm btn-primary"><i class="fa-solid fa-pen-to-square"></i></button"></form>
                                     </div>
                                 </td>
                             </tr>
@@ -169,8 +168,7 @@
                         </td>
                         <td class="border-bottom-0">
                             <div class="d-flex align-items-center gap-2">
-                                <a href="{{route('posts.edit', $post->id)}}" class="btn btn-sm btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
-                                <a href="#" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></a>
+                                <a href="{{route('dashboard.posts.edit', $post->id)}}" class="btn btn-sm btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
                             </div>
                         </td>
                     </tr>

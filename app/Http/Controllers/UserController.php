@@ -95,7 +95,6 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         $user = User::findOrFail($id);
-
         $user->is_deleted = true;
         $user->save();
 
@@ -218,4 +217,31 @@ class UserController extends Controller
             'postsPerDay' => $postsPerDay,
         ]);
     }
+
+
+    public function dashboardEdit($id){
+        $user = User::find($id);
+        return view('dashboard.users.edit', compact('user'));
+    }
+
+    public function dashboardUpdate(Request $request, $id){
+        $user = User::find($id);
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->updated_at = now();
+        
+        if($request->role == 'is_author'){
+            $user->is_author = true;
+        }
+        
+        if($request->role == 'is_admin'){
+            $user->is_admin = true;
+        }
+        
+        $user->save();
+        
+        return redirect()->route('dashboard.users.index');
+    }
+
 }

@@ -85,14 +85,18 @@ Route::get("/home", function () {
 Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     // Users Management
     Route::get('/users', [UserController::class, 'index'])->name('dashboard.users.index');
-    Route::get('/users/edit', [UserController::class, 'edit'])->name('dashboard.users.edit');
-    Route::get('/users/create', [UserController::class, 'dashboardCreate'])->name('dashboard.users.edit');
+    Route::get('/users/edit/{user}', [UserController::class, 'dashboardEdit'])->name('dashboard.users.edit');
+    Route::put('/users/edit/{user}', [UserController::class, 'dashboardUpdate'])->name('dashboard.users.update');
     
     // Posts Management
     Route::get('/posts', [PostController::class, 'dashboardPosts'])->name('dashboard.posts.index');
+    Route::get('/posts/edit/{post}', [PostController::class, 'dashboardEdit'])->name('dashboard.posts.edit');
+    Route::put('/posts/edit/{post}', [PostController::class, 'dashboardUpdate'])->name('dashboard.posts.update');
+    Route::post('/posts/destroy/{post}', [PostController::class, 'dashboardDestroy'])->name('dashboard.posts.destroy');
     
     // Comments Management
     Route::get('/comments', [CommentController::class, 'comments'])->name('dashboard.comments.index');
+    Route::post('/comments/destroy/{comment}', [CommentController::class, 'dashboardDestroy'])->name('dashboard.comments.destroy');
     
     // Premium Management
     Route::get('/premium', [PremiumController::class, 'index'])->name('dashboard.premium.index');

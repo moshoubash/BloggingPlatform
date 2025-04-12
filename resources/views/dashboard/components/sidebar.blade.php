@@ -54,14 +54,6 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{route('dashboard.reports.index')}}" aria-expanded="false">
-              <span>
-                <i class="ti ti-file"></i>
-              </span>
-              <span class="hide-menu">Reports</span>
-            </a>
-          </li>
-          <li class="sidebar-item">
             <a class="sidebar-link" href="{{route('dashboard.tags.index')}}" aria-expanded="false">
               <span>
                 <i class="ti ti-tag"></i>
@@ -87,14 +79,6 @@
                 <i class="ti ti-user"></i>
               </span>
               <span class="hide-menu">Account</span>
-            </a>
-          </li>
-          <li class="sidebar-item">
-            <a class="sidebar-link" href="{{route('dashboard.site.index')}}" aria-expanded="false">
-              <span>
-                <i class="ti ti-settings"></i>
-              </span>
-              <span class="hide-menu">Site</span>
             </a>
           </li>
         </ul>

@@ -55,4 +55,10 @@ class CommentController extends Controller
         return view('dashboard.comments.index', compact('comments'));
     }
 
+
+    public function dashboardDestroy($id){
+        $comment = Comment::find($id);
+        $comment->delete();
+        return back();
+    }
 }

@@ -5,13 +5,7 @@
           <i class="ti ti-menu-2"></i>
         </a>
       </li>
-      <!-- Notifications -->
-      <li class="nav-item">
-        <a class="nav-link nav-icon-hover" href="javascript:void(0)">
-          <i class="ti ti-bell-ringing"></i>
-          <div class="notification bg-primary rounded-circle"></div>
-        </a>
-      </li>
+      
       <!-- End Notifications -->
     </ul>
     <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
@@ -24,17 +18,9 @@
           </a>
           <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
             <div class="message-body">
-              <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                <i class="ti ti-user fs-6"></i>
-                <p class="mb-0 fs-3">My Profile</p>
-              </a>
-              <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+              <a href="{{route('dashboard.account.index')}}" class="d-flex align-items-center gap-2 dropdown-item">
                 <i class="ti ti-mail fs-6"></i>
                 <p class="mb-0 fs-3">My Account</p>
-              </a>
-              <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                <i class="ti ti-list-check fs-6"></i>
-                <p class="mb-0 fs-3">My Task</p>
               </a>
               <form method="POST" action="{{ route('logout') }}">
                 @csrf
