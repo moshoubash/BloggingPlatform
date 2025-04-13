@@ -98,124 +98,16 @@ class PostController extends Controller
      * @return Illuminate\Http\Response
      */
     
-    public function store(Request $request)
-    {
-        // Validate and get the post content
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'body' => 'required|string',
-        ]);
-
-        $blogContent = $validatedData['body'];
-
-        // Step 1: Load stopwords from the Excel file
-        $stopwords = $this->loadStopwordsFromExcel(storage_path('app/stopwords.xlsx'));
-
-        // Pre-process the current post
-        $processedContent = $this->removeStopwords($blogContent, $stopwords);
-
-        // Step 2: Normalize text
-        $samples = [[$processedContent]];
-        $normalizer = new TextNormalizer();
-        $normalizer->transform($samples);
-        $normalizedText = $samples[0][0];
-
-        // Step 3: Retrieve all posts to create a corpus
-        $allPosts = Post::all()->pluck('body')->toArray();
-
-        // Preprocess all posts
-        $corpus = [];
-        foreach ($allPosts as $postContent) {
-            $processedPost = $this->removeStopwords($postContent, $stopwords);
-            $samples = [[$processedPost]];
-            $normalizer->transform($samples);
-            $corpus[] = $samples[0][0];
+     public function store(StorePostRequest $request)
+     {
+        $validated = $request->validated();
+ 
+        if (isset($validated['tags'])) {
+            $validated['tags'] = json_decode($validated['tags'], true);
         }
-
-        // Add the current post to the corpus
-        $corpus[] = $normalizedText;
-
-        // Step 4: Create dataset for the corpus
-        $dataset = new Unlabeled(array_map(fn($text) => [$text], $corpus));
-
-        // Step 5: Tokenize and vectorize the corpus
-        $vectorizer = new WordCountVectorizer(PHP_INT_MAX, 1, 0.8);
-        $dataset->apply($vectorizer);
-
-        // Step 6: Apply TF-IDF to the corpus
-        $tfidf = new TfIdfTransformer();
-        $dataset->apply($tfidf);
-
-        // Step 7: Extract TF-IDF scores for the current post
-        $samples = $dataset->samples();
-        $currentPostVector = $samples[array_key_last($samples)]; // Last sample is the current post
-
-        // Tokenize the current post to get words
-        $tokenizer = new Word();
-        $words = $tokenizer->tokenize($normalizedText);
-
-        // Remove duplicates from words while preserving order
-        $uniqueWords = array_values(array_unique($words));
-
-        // Pair words with their TF-IDF scores
-        $wordScores = [];
-        foreach ($uniqueWords as $index => $word) {
-            if (isset($currentPostVector[$index])) {
-                $wordScores[$word] = $currentPostVector[$index];
-            }
-        }
-
-        // Sort by score in descending order
-        arsort($wordScores);
-
-        // Get top 5 words
-        $tags = array_slice(array_keys($wordScores), 0, 5);
-
-        // Convert tags to array
-        $validatedData['tags'] = $tags;
-
-        // Set default featured image if none is provided
-        if (empty($validatedData['featured_image'])) {
-            $validatedData['featured_image'] = 'https://placehold.co/960x640';
-        }
-
-        if($request->stripe_subscription_id == 1){
-            $validatedData['is_premium'] = true;
-        }
-
-        // Create the post
-        return (new CreatesNewPost)->store($request->user(), $validatedData);
-    }
-
-    private function loadStopwordsFromExcel(string $filePath): array
-    {
-        $spreadsheet = IOFactory::load($filePath);
-        $sheet = $spreadsheet->getActiveSheet();
-        $stopwords = [];
-
-        foreach ($sheet->getColumnIterator('A') as $column) {
-            foreach ($column->getCellIterator() as $cell) {
-                if ($cell->getValue()) {
-                    $stopwords[] = strtolower(trim($cell->getValue()));
-                }
-            }
-        }
-
-        return $stopwords;
-    }
-
-    private function removeStopwords(string $text, array $stopwords): string
-    {
-        $stopwordsLookup = array_flip(array_map('strtolower', $stopwords));
-        
-        $words = preg_split('/\s+/', $text);
-        
-        $filteredWords = array_filter($words, function($word) use ($stopwordsLookup) {
-            $word = preg_replace('/[^\p{L}\p{N}]/u', '', strtolower($word));
-            return $word !== '' && !isset($stopwordsLookup[$word]);
-        });
-        return implode(' ', $filteredWords);
-    }
+ 
+        return (new CreatesNewPost)->store($request->user(), $validated);
+     }
 
     /**
      * Display the specified resource.
